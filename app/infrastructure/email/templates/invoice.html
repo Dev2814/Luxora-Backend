@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 style="color:#111;">Hello {{ customer_name }},</h3>
+
+<p style="font-size:14px;color:#444;">
+Thank you for shopping with <strong>Luxora</strong>. Your payment has been successfully received.
+</p>
+
+<p style="font-size:14px;color:#444;">
+Please find your invoice attached to this email for your records.
+</p>
+
+<!-- Order Summary -->
+<div style="margin-top:20px;border:1px solid #e5e7eb;padding:15px;border-radius:6px;">
+
+<h4 style="margin-top:0;">Order Summary</h4>
+
+<table style="width:100%;border-collapse:collapse;font-size:14px;">
+<tr>
+<td style="padding:6px 0;"><strong>Order ID</strong></td>
+<td style="text-align:right;">#{{ order.id }}</td>
+</tr>
+
+<tr>
+<td style="padding:6px 0;"><strong>Order Date</strong></td>
+<td style="text-align:right;">{{ order.created_at }}</td>
+</tr>
+
+<tr>
+<td style="padding:6px 0;"><strong>Payment Status</strong></td>
+<td style="text-align:right;color:green;">
+{{ order.payment_status }}
+</td>
+</tr>
+
+<tr>
+<td style="padding:6px 0;"><strong>Total Amount</strong></td>
+<td style="text-align:right;">
+${{ order.total_amount }}
+</td>
+</tr>
+</table>
+
+</div>
+
+<!-- Info Message -->
+<p style="margin-top:20px;font-size:14px;color:#555;">
+If you have any questions about your order, please contact our support team.
+</p>
+
+<p style="font-size:14px;color:#555;">
+Thank you for choosing <strong>Luxora</strong> 🛍️
+</p>
+
+{% endblock %}

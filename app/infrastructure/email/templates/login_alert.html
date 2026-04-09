@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>🔐 New Login Detected</h2>
+
+<p>Hello,</p>
+
+<p>
+A new login to your Luxora account was detected.
+</p>
+
+<table style="margin-top:20px;">
+<tr>
+<td><strong>Time:</strong></td>
+<td>{{ login_time }}</td>
+</tr>
+
+<tr>
+<td><strong>IP Address:</strong></td>
+<td>{{ ip }}</td>
+</tr>
+
+<tr>
+<td><strong>Device:</strong></td>
+<td>{{ user_agent }}</td>
+</tr>
+</table>
+
+<p style="margin-top:20px;">
+If this was you, no action is needed.
+</p>
+
+<p style="color:#b00020;">
+If this wasn't you, please reset your password immediately.
+</p>
+
+{% endblock %}

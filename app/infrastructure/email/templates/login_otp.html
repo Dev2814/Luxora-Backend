@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="margin-bottom:20px;">🔐 Login Verification</h2>
+
+<p>Hello,</p>
+
+<p>
+Use the following One-Time Password (OTP) to login to your
+<strong>Luxora</strong> account.
+</p>
+
+<div style="
+margin:30px auto;
+padding:18px;
+max-width:260px;
+text-align:center;
+font-size:32px;
+letter-spacing:8px;
+font-weight:bold;
+background:#f4f6f8;
+border-radius:8px;
+border:1px solid #ddd;
+">
+
+{{ otp }}
+
+</div>
+
+<p>
+This code will expire in <strong>5 minutes</strong>.
+</p>
+
+<p style="color:#777;font-size:14px;">
+If you did not attempt to login, please reset your password immediately.
+</p>
+
+{% endblock %}

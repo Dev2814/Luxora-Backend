@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="color:#b00020;">🚨 System Error Alert</h2>
+
+<p>An error occurred in the Luxora backend system.</p>
+
+<div style="
+background:#f8d7da;
+padding:15px;
+border-radius:6px;
+border:1px solid #f5c2c7;
+color:#842029;
+margin:20px 0;
+">
+
+{{ message }}
+
+</div>
+
+<p>Please investigate immediately.</p>
+
+{% endblock %}

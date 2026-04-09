@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+venv/
+env/
+LB/
+.venv/
+
+# Environment variables
+.env
+.env.*
+
+
+# Logs
+*.log
+
+# Folders 
+uploads/
+staticfiles/
+logs/
+invoices/
+Dummy Frontend/
+Payment-Frontend/
+
+# Alembic
+alembic/versions/*.pyc
+alembic.ini
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Database (if local)
+*.sqlite3
+
+# Build / cache
+*.egg-info/
+dist/
+build/
