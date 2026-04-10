@@ -202,6 +202,8 @@ class OrderService:
             return {
                 "id": order.id,
                 "user_id": order.user_id,
+                "status": order.status.value,
+                "payment_status": order.payment_status.value,
                 "address_id": order.address_id,
                 "total_amount": order.total_amount,
                 "items": order_items
