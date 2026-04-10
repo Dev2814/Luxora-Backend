@@ -372,6 +372,8 @@ class OrderService:
                 "id": order.id,
                 "user_id": order.user_id,
                 "address_id": order.address_id,
+                "status": order.status.value,
+                "payment_status": order.payment_status.value,
                 "total_amount": order.total_amount,
                 "items": order_items
             })
@@ -447,6 +449,8 @@ class OrderService:
             "id": order.id,
             "user_id": order.user_id,
             "address_id": order.address_id,
+            "status": order.status.value,
+            "payment_status": order.payment_status.value,
             "total_amount": order.total_amount,
             "items": order_items
         }

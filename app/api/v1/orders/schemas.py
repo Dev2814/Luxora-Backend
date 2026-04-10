@@ -85,6 +85,8 @@ class OrderResponse(BaseModel):
     id: int
     user_id: int
     address_id: int
+    status: str 
+    payment_status: str
     total_amount: Decimal
 
     items: List[OrderItemResponse]
