@@ -378,4 +378,75 @@ class OrderService:
 
         return order_list    
     
-    
+    # ======================================================
+    # GET SINGLE ORDER
+    # ======================================================
+
+    def get_single_order(self, order_id: int):
+
+        order = (
+            self.db.query(Order)
+            .filter(Order.id == order_id)
+            .options(
+                selectinload(Order.items)
+                .joinedload(OrderItem.variant)
+                .joinedload(ProductVariant.product)
+                .selectinload(Product.images),
+
+                selectinload(Order.items)
+                .joinedload(OrderItem.variant)
+                .selectinload(ProductVariant.attribute_values)
+                .joinedload(ProductAttributeValue.attribute)
+            )
+            .first()
+        )
+
+        if not order:
+            return None
+
+        order_items = []
+
+        for item in order.items:
+
+            variant = item.variant
+            product = variant.product
+
+            # IMAGE
+            image_url = None
+            if product.images:
+                image_url = next(
+                    (img.image_url for img in product.images if img.is_primary),
+                    product.images[0].image_url
+                )
+
+            # ATTRIBUTES
+            attributes = []
+            if variant.attribute_values:
+                for val in variant.attribute_values:
+                    attributes.append({
+                        "attribute": val.attribute.name,
+                        "value": val.value
+                    })
+
+            order_items.append({
+                "id": item.id,
+                "order_id": order.id,
+                "variant_id": variant.id,
+                "quantity": item.quantity,
+                "price_snapshot": item.price_snapshot,
+                "subtotal": item.subtotal,
+
+                "product_id": product.id,
+                "product_name": product.name,
+                "compare_price": product.compare_price,
+                "image": image_url,
+                "attributes": attributes
+            })
+
+        return {
+            "id": order.id,
+            "user_id": order.user_id,
+            "address_id": order.address_id,
+            "total_amount": order.total_amount,
+            "items": order_items
+        }

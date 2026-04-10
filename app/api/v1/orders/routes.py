@@ -158,8 +158,10 @@ def get_order(
 
         if not order or order.user_id != current_user["user_id"]:
             raise HTTPException(status_code=404, detail="Order not found")
+        
+        service = OrderService(repo.db)
 
-        return order
+        return service.get_single_order(order_id)
 
     except HTTPException:
         raise
