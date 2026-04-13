@@ -30,6 +30,8 @@ from sqlalchemy import select
 
 from app.models.order import Order
 from app.models.order_item import OrderItem
+from app.models.product_variant import ProductVariant
+from app.models.product import Product
 
 
 class OrderRepository:
@@ -117,3 +119,59 @@ class OrderRepository:
         )
 
         return list(self.db.execute(stmt).scalars().all())
+    
+    # ======================================================
+    # GET VENDOR ORDERS 
+    # ======================================================
+
+    def get_vendor_order(self, vendor_id: int, order_id: int):
+        """
+        Fetch order for a vendor.
+
+        Ensures:
+        - Order belongs to vendor products
+        - Proper join path used (NO ambiguity)
+        """
+
+        return (
+            self.db.query(Order)
+            .join(OrderItem, OrderItem.order_id == Order.id)
+            .join(ProductVariant, ProductVariant.id == OrderItem.variant_id)
+            .join(Product, Product.id == ProductVariant.product_id)
+            .filter(
+                Order.id == order_id,
+                Product.vendor_id == vendor_id
+            )
+            .first()
+        )
+    
+    # ======================================================
+    # UPDATE ORDER STATUS
+    # ======================================================
+
+    def update_order_status(self, order: Order, status: str):
+        """
+        Update order status.
+        """
+        order.status = status
+        self.db.flush()
+        return order
+    
+    # ======================================================
+    # LIST VENDOR ORDERS
+    # ======================================================
+
+    def get_vendor_orders(self, vendor_id: int):
+        """
+        Fetch all orders related to a vendor.
+        """
+
+        return (
+            self.db.query(Order)
+            .join(OrderItem, OrderItem.order_id == Order.id)
+            .join(ProductVariant, ProductVariant.id == OrderItem.variant_id)
+            .join(Product, Product.id == ProductVariant.product_id)
+            .filter(Product.vendor_id == vendor_id)
+            .distinct()
+            .all()
+        )

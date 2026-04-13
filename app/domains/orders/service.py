@@ -44,6 +44,14 @@ from sqlalchemy.orm import joinedload, selectinload
 from app.infrastructure.invoice.service import InvoiceService
 
 
+VALID_TRANSITIONS = {
+    "pending": ["confirmed", "cancelled"],
+    "confirmed": ["shipped", "cancelled"],
+    "shipped": ["delivered"],
+    "delivered": [],
+    "cancelled": []
+}
+
 class OrderService:
     """
     Business logic layer for checkout and order creation.
@@ -455,4 +463,104 @@ class OrderService:
             "payment_status": order.payment_status.value,
             "total_amount": order.total_amount,
             "items": order_items
+        }
+    
+    # ======================================================
+    # GET VENDOR ORDER
+    # ======================================================
+
+    def get_vendor_order_details(self, vendor_id: int, order_id: int):
+        """
+        Fetch full order details for vendor.
+        """
+
+        order = self.order_repo.get_vendor_order(vendor_id, order_id)
+
+        if not order:
+            raise ValueError("Order not found")
+
+        items = []
+
+        for item in order.items:
+            variant = item.variant
+            product = variant.product
+
+            items.append({
+                "product_name": product.name,
+                "variant_name": variant.name,
+                "quantity": item.quantity,
+                "price": float(item.price_snapshot),
+                "subtotal": float(item.subtotal),
+            })
+
+        return {
+            "order_id": order.id,
+            "status": order.status.value,
+            "payment_status": order.payment_status.value,
+            "total_amount": float(order.total_amount),
+            "created_at": str(order.created_at),
+
+            "customer": {
+                "name": order.user.customer_profile.full_name if order.user.customer_profile else "Guest",
+                "email": order.user.email
+            },
+
+            "items": items
+        }
+    
+    # ======================================================
+    # UPDATE ORDER STATUS
+    # ======================================================
+
+    def update_order_status(self, vendor_id: int, order_id: int, new_status: str):
+        """
+        Update order status with strict transition validation.
+        """
+
+        order = self.order_repo.get_vendor_order(vendor_id, order_id)
+
+        if not order:
+            raise ValueError("Order not found")
+
+        current_status = order.status.value.lower()
+        new_status = new_status.lower()
+
+        if new_status not in VALID_TRANSITIONS.get(current_status, []):
+            raise ValueError(
+                f"Invalid transition: {current_status} → {new_status}"
+            )
+
+        self.order_repo.update_order_status(order, new_status)
+
+        self.db.commit()
+
+        return {
+            "message": f"Order status updated to {new_status}"
+        }
+    
+    # ======================================================
+    # VENDOR ORDER LIST
+    # ======================================================
+
+    def get_vendor_orders(self, vendor_id: int):
+        """
+        Get all vendor orders (list view).
+        """
+
+        orders = self.order_repo.get_vendor_orders(vendor_id)
+
+        result = []
+
+        for order in orders:
+            result.append({
+                "order_id": order.id,
+                "customer_name": order.user.customer_profile.full_name if order.user.customer_profile else "Guest",
+                "total_amount": float(order.total_amount),
+                "status": order.status.value,
+                "payment_status": order.payment_status.value,
+                "created_at": str(order.created_at)
+            })
+
+        return {
+            "items": result
         }

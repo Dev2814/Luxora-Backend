@@ -104,3 +104,54 @@ class OrderListResponse(BaseModel):
     """
 
     orders: List[OrderResponse]
+
+# =========================================================
+# VENDOR ORDER DETAILS RESPONSE
+# =========================================================
+
+class VendorOrderItem(BaseModel):
+    product_name: str
+    variant_name: str
+    quantity: int
+    price: float
+    subtotal: float
+
+
+class VendorCustomerInfo(BaseModel):
+    name: str
+    email: str
+
+
+class VendorOrderDetailsResponse(BaseModel):
+    order_id: int
+    status: str
+    payment_status: str
+    total_amount: float
+    created_at: str
+
+    customer: VendorCustomerInfo
+    items: List[VendorOrderItem]
+
+
+# =========================================================
+# UPDATE ORDER STATUS
+# =========================================================
+
+class UpdateOrderStatusRequest(BaseModel):
+    status: str
+
+# ======================================================
+# VENDOR ORDER LIST RESPONSE
+# ======================================================
+
+class VendorOrderListItem(BaseModel):
+    order_id: int
+    customer_name: str
+    total_amount: float
+    status: str
+    payment_status: str
+    created_at: str
+
+
+class VendorOrderListResponse(BaseModel):
+    items: List[VendorOrderListItem]
