@@ -34,7 +34,8 @@ from app.api.v1.vendors.schemas import (
     VendorApply,
     VendorUpdate,
     VendorProfileResponse,
-    VendorProductListResponse
+    VendorProductListResponse,
+    UpdateProductSchema
 )
 
 router = APIRouter(
@@ -203,7 +204,7 @@ def get_vendor_product(
 )
 def update_vendor_product(
     product_id: int,
-    payload: dict,
+    payload: UpdateProductSchema,
     user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

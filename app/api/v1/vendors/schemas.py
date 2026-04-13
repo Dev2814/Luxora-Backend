@@ -163,3 +163,25 @@ class VendorApproval(BaseModel):
     status: VendorStatus
 
     rejection_reason: Optional[str] = None
+
+# ======================================================
+# PRODUCT UPDATE SCHEMA (ENTERPRISE)
+# ======================================================
+
+class UpdateVariantSchema(BaseModel):
+    id: Optional[int] = None
+    name: str
+    price: float
+    stock: int
+    attribute_value_ids: List[int] = []
+
+
+class UpdateProductSchema(BaseModel):
+    name: Optional[str]
+    description: Optional[str]
+    price: Optional[float]
+    compare_price: Optional[float]
+    brand_id: Optional[int]
+    category_id: Optional[int]
+
+    variants: Optional[List[UpdateVariantSchema]]

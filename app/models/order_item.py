@@ -70,8 +70,8 @@ class OrderItem(Base):
 
     variant_id = Column(
         Integer,
-        ForeignKey("product_variants.id"),
-        nullable=False,
+        ForeignKey("product_variants.id", ondelete="CASCADE"),
+        nullable=True,
     )
 
     # ==================================================

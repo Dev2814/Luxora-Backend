@@ -272,17 +272,24 @@ class VendorRepository:
 
     def update_product(self, product: Product, data: dict) -> Product:
         """
-        Update vendor product details.
+        Safe update for product (only simple fields).
         """
 
         try:
+            simple_fields = {
+                "name",
+                "description",
+                "price",
+                "compare_price",
+                "brand_id",
+                "category_id"
+            }
 
             for field, value in data.items():
-                setattr(product, field, value)
+                if field in simple_fields:
+                    setattr(product, field, value)
 
             self.db.flush()
-            self.db.refresh(product)
-
             return product
 
         except SQLAlchemyError:
@@ -293,34 +300,16 @@ class VendorRepository:
     # SOFT DELETE PRODUCT
     # ======================================================
 
-    def delete_product(self, product: Product) -> Product:
+    def delete_product(self, product: Product):
         """
-        Soft delete vendor product.
-
-        Responsibilities:
-        - Mark product as deleted
-        - Prevent duplicate delete
-        - Keep transaction control in service layer
+        HARD DELETE product and all related data
+        (Requires DB cascade properly configured)
         """
 
-        # -----------------------------
-        # PREVENT DOUBLE DELETE
-        # -----------------------------
-        if product.is_deleted:
-            raise ValueError("Product already deleted")
+        try:
+            self.db.delete(product)   # 🔥 ACTUAL DELETE
+            self.db.flush()
 
-        # -----------------------------
-        # SOFT DELETE
-        # -----------------------------
-        product.is_deleted = True
-
-        # Optional (enterprise)
-        # product.deleted_at = datetime.utcnow()
-
-        # -----------------------------
-        # FLUSH ONLY (NO COMMIT HERE)
-        # -----------------------------
-        self.db.delete(product)
-        self.db.flush() 
-
-        return product
+        except SQLAlchemyError:
+            self.db.rollback()
+            raise
