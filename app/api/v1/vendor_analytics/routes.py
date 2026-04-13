@@ -17,6 +17,7 @@ from app.api.v1.vendor_analytics.schemas import (
     RevenueChartResponse,
     LowStockResponse,
     VendorEarningsResponse,
+    VendorProductOrdersResponse
 )
 
 from app.domains.vendor_analytics.service import VendorAnalyticsService
@@ -186,3 +187,32 @@ def get_earnings(
         raise HTTPException(status_code=404, detail="Vendor not found")
 
     return service.get_earnings(vendor.id)
+
+# =========================================================
+# VENDOR PRODUCT ORDERS ENDPOINT
+# =========================================================
+@router.get(
+    "/product-orders",
+    response_model=VendorProductOrdersResponse,
+    summary="Get Vendor Product Orders"
+)
+def get_product_orders(
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, le=100),
+    service: VendorAnalyticsService = Depends(get_service),
+    current_user=Depends(get_current_user)
+):
+    db = service.repo.db
+
+    vendor = db.query(VendorProfile).filter(
+        VendorProfile.user_id == current_user["user_id"]
+    ).first()
+
+    if not vendor:
+        raise HTTPException(status_code=404, detail="Vendor not found")
+
+    return service.get_product_orders(
+        vendor.id,
+        page,
+        limit
+    )

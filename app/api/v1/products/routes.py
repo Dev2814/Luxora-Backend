@@ -155,7 +155,9 @@ def create_product(
         if not vendor:
             raise HTTPException(status_code=403, detail="You are not a vendor")
 
-        return service.create_product(vendor.id, payload)
+        product = service.create_product(vendor.id, payload)
+
+        return service.get_product(product.id)
 
     except ValueError as e:
         log_event("product_create_api_error", level="warning", error=str(e))

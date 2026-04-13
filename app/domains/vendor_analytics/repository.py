@@ -11,6 +11,7 @@ Uses Order → OrderItem → Product → Vendor relationship
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.models.order import Order, PaymentStatus
+from app.models.customer_profile import CustomerProfile
 from app.models.order_item import OrderItem
 from app.models.inventory import Inventory
 from app.models.product import Product
@@ -224,3 +225,43 @@ class VendorAnalyticsRepository:
             "paid_revenue": float(paid_revenue),
             "pending_revenue": float(pending_revenue),
         }
+    
+    # ----------------------------------------
+    # PRODUCT ORDERS
+    # ----------------------------------------
+
+    def get_vendor_product_orders(self, vendor_id: int, page: int, limit: int):
+        """
+        Fetch vendor product orders list with customer details.
+        """
+
+        from app.models.user import User
+
+        offset = (page - 1) * limit
+
+        query = (
+            self.db.query(
+                Order.id.label("order_id"),
+                Product.name.label("product_name"),
+                ProductVariant.name.label("variant_name"),
+                CustomerProfile.full_name.label("customer_name"),
+                # User.email.label("customer_email"),
+                OrderItem.quantity,
+                OrderItem.subtotal,
+                Order.status,
+                Order.payment_status,
+                Order.created_at
+            )
+            .join(OrderItem, OrderItem.order_id == Order.id)
+            .join(ProductVariant, ProductVariant.id == OrderItem.variant_id)
+            .join(Product, Product.id == ProductVariant.product_id)
+            .join(User, User.id == Order.user_id)
+            .filter(Product.vendor_id == vendor_id)
+            .order_by(Order.created_at.desc())
+        )
+
+        total = query.count()
+
+        results = query.offset(offset).limit(limit).all()
+
+        return results, total

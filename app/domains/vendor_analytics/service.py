@@ -73,3 +73,33 @@ class VendorAnalyticsService:
 
     def get_earnings(self, vendor_id: int):
         return self.repo.get_vendor_earnings(vendor_id)
+    
+
+    # ----------------------------------------
+    # VENDOR PRODUCT ORDERS
+    # ----------------------------------------
+
+    def get_product_orders(self, vendor_id: int, page: int, limit: int):
+        results, total = self.repo.get_vendor_product_orders(
+            vendor_id, page, limit
+        )
+
+        return {
+            "items": [
+                {
+                    "order_id": r.order_id,
+                    "product_name": r.product_name,
+                    "variant_name": r.variant_name,
+                    "customer_name": r.customer_name,
+                    "quantity": r.quantity,
+                    "subtotal": float(r.subtotal),
+                    "order_status": r.status.value if hasattr(r.status, "value") else r.status,
+                    "payment_status": r.payment_status.value if hasattr(r.payment_status, "value") else r.payment_status,
+                    "created_at": str(r.created_at),
+                }
+                for r in results
+            ],
+            "total": total,
+            "page": page,
+            "limit": limit
+        }

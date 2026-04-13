@@ -182,8 +182,20 @@ class ProductRepository:
         """
         Update product fields dynamically.
         """
+        allowed_fields = {
+            "name",
+            "description",
+            "price",
+            "compare_price",
+            "brand_id",
+            "category_id",
+            "is_active"
+        }
+
         for key, value in data.items():
-            setattr(product, key, value)
+            if key in allowed_fields:
+                setattr(product, key, value)
+                
         return product
 
     # ==================================================

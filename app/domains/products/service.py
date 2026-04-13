@@ -40,18 +40,19 @@ class ProductService:
     def _attach_stock(self, variant):
         inventory = variant.inventory
 
-        if not inventory or inventory.available_stock == 0:
+        stock = 0
+        if inventory:
+            stock = inventory.stock or 0
+
+        if stock <= 0:
             variant.stock_status = "out_of_stock"
-            variant.available_stock = 0
-
-        elif inventory.available_stock <= inventory.low_stock_threshold:
-            variant.stock_status = "limited_stock"
-            variant.available_stock = inventory.available_stock
-
+        elif stock <= 5:
+            variant.stock_status = "low_stock"
         else:
             variant.stock_status = "in_stock"
-            variant.available_stock = inventory.available_stock
 
+        variant.available_stock = stock
+        
     # ==================================================
     # GENRATE SKU
     # ==================================================
@@ -139,7 +140,7 @@ class ProductService:
 
             log_event("product_created", product_id=product.id, vendor_id=vendor_id)
 
-            return product
+            return self.get_product(product.id)
 
         except SQLAlchemyError as e:
             self.repo.rollback()

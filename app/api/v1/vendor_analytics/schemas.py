@@ -63,3 +63,25 @@ class VendorEarningsResponse(BaseModel):
     total_orders: int
     paid_revenue: float
     pending_revenue: float
+
+# ======================================================
+# PRODUCT ORDERS LIST RESPONSE
+# ======================================================
+
+class VendorProductOrderItem(BaseModel):
+    order_id: int
+    product_name: str
+    variant_name: str
+    customer_name: str
+    quantity: int
+    subtotal: float
+    order_status: str
+    payment_status: str
+    created_at: str
+
+
+class VendorProductOrdersResponse(BaseModel):
+    items: List[VendorProductOrderItem]
+    total: int
+    page: int
+    limit: int
