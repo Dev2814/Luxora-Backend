@@ -163,6 +163,14 @@ class Order(Base):
         nullable=False
     )
 
+    status_updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        # onupdate=func.now(),
+        nullable=False,
+        index=True
+    )
+
     # ==================================================
     # RELATIONSHIPS
     # ==================================================
@@ -202,6 +210,14 @@ class Order(Base):
         "CouponUsage",
         back_populates="order",
         uselist=False
+    )
+
+    timeline = relationship(
+        "OrderTimeline",
+        back_populates="order",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+        order_by="OrderTimeline.created_at.asc()"
     )
 
     # ==================================================

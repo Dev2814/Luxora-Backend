@@ -41,6 +41,7 @@ import app.models.cart_item
 # Orders
 import app.models.order
 import app.models.order_item
+import app.models.order_timeline
 
 # Invoice
 import app.models.invoice

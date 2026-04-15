@@ -155,3 +155,15 @@ class VendorOrderListItem(BaseModel):
 
 class VendorOrderListResponse(BaseModel):
     items: List[VendorOrderListItem]
+
+# ======================================================
+# ORDER TIMELINE RESPONSE
+# ======================================================
+
+class OrderTimelineItem(BaseModel):
+    status: str
+    created_at: str
+
+
+class OrderTimelineResponse(BaseModel):
+    items: List[OrderTimelineItem]

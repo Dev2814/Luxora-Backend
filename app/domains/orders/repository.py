@@ -32,6 +32,7 @@ from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.product_variant import ProductVariant
 from app.models.product import Product
+from app.models.order_timeline import OrderTimeline
 
 
 class OrderRepository:
@@ -173,5 +174,57 @@ class OrderRepository:
             .join(Product, Product.id == ProductVariant.product_id)
             .filter(Product.vendor_id == vendor_id)
             .distinct()
+            .all()
+        )
+    
+    # ======================================================
+    # LAST TIMELINE ENTRY
+    # ======================================================
+
+    def get_last_timeline(self, order_id: int):
+        """
+        Fetch latest timeline entry for order.
+        """
+
+        return (
+            self.db.query(OrderTimeline)
+            .filter(OrderTimeline.order_id == order_id)
+            .order_by(OrderTimeline.created_at.desc())
+            .first()
+        )
+
+
+    # ======================================================
+    # ADD ORDER TIMELINE
+    # ======================================================
+
+    def add_order_timeline(self, order_id: int, status: str):
+        """
+        Create a new timeline entry for order.
+
+        This is append-only log.
+        """
+
+        timeline = OrderTimeline(
+            order_id=order_id,
+            status=status
+        )
+
+        self.db.add(timeline)
+        self.db.flush()
+
+    # ======================================================
+    # GET ORDER TIMELINE
+    # ======================================================
+
+    def get_order_timeline(self, order_id: int):
+        """
+        Fetch full timeline for an order.
+        """
+
+        return (
+            self.db.query(OrderTimeline)
+            .filter(OrderTimeline.order_id == order_id)
+            .order_by(OrderTimeline.created_at.asc())
             .all()
         )

@@ -1,11 +1,13 @@
 from fastapi import FastAPI, Depends
 from fastapi.openapi.docs import get_swagger_ui_html
 from swagger_ui_bundle import swagger_ui_path
+from app.infrastructure.database.session import SessionLocal
 from contextlib import asynccontextmanager
-
+from fastapi.middleware.cors import CORSMiddleware
+from app.jobs.order_scheduler import auto_update_orders
 from app.core.log_config import setup_logging
 from app.core.logger import log_event
-
+import threading
 from app.api.v1.api import api_router
 from app.middleware.rate_limit_middleware import RateLimitMiddleware
 from app.api.v1.auth.error_handler import auth_exception_handler
@@ -26,6 +28,18 @@ async def lifespan(app: FastAPI):
 
     # Startup
     log_event("application_startup")
+
+    def start_scheduler():
+        while True:
+            db = SessionLocal()
+            try:
+                auto_update_orders(db)
+            finally:
+                db.close()
+
+            time.sleep(60)  # run every 5 seconds
+
+    threading.Thread(target=start_scheduler, daemon=True).start()
 
     yield
 
@@ -51,10 +65,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,

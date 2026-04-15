@@ -40,17 +40,10 @@ from app.domains.cart.repository import CartRepository
 
 from app.core.logger import log_event
 from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy.sql import func
 
 from app.infrastructure.invoice.service import InvoiceService
 
-
-VALID_TRANSITIONS = {
-    "pending": ["confirmed", "cancelled"],
-    "confirmed": ["shipped", "cancelled"],
-    "shipped": ["delivered"],
-    "delivered": [],
-    "cancelled": []
-}
 
 class OrderService:
     """
@@ -149,6 +142,9 @@ class OrderService:
                 )
 
                 self.order_repo.create_order_item(order_item)
+            
+
+            self.order_repo.add_order_timeline(order.id, "pending")
 
             # --------------------------------------------------
             # UPDATE INVENTORY
@@ -294,6 +290,7 @@ class OrderService:
             )
 
             self.order_repo.create_order_item(order_item)
+            self.order_repo.add_order_timeline(order.id, "pending")
 
             # -------------------------------
             # UPDATE STOCK
@@ -514,28 +511,74 @@ class OrderService:
 
     def update_order_status(self, vendor_id: int, order_id: int, new_status: str):
         """
-        Update order status with strict transition validation.
+        Update order status and create timeline entry.
+
+        Enterprise Features:
+        -------------------
+        • Validates status transitions
+        • Prevents duplicate timeline entries
+        • Transaction-safe operation
+        • Vendor ownership validation
         """
 
+        # --------------------------------------------------
+        # FETCH ORDER (WITH VALIDATION)
+        # --------------------------------------------------
         order = self.order_repo.get_vendor_order(vendor_id, order_id)
 
         if not order:
-            raise ValueError("Order not found")
+            raise ValueError("Order not found or access denied")
 
         current_status = order.status.value.lower()
         new_status = new_status.lower()
 
+        # --------------------------------------------------
+        # VALIDATE TRANSITION
+        # --------------------------------------------------
+        VALID_TRANSITIONS = {
+            "pending": ["confirmed", "cancelled"],
+            "confirmed": ["shipped", "cancelled"],
+            "shipped": ["delivered"],
+            "delivered": [],
+            "cancelled": []
+        }
+
         if new_status not in VALID_TRANSITIONS.get(current_status, []):
-            raise ValueError(
-                f"Invalid transition: {current_status} → {new_status}"
-            )
+            raise ValueError(f"Invalid transition: {current_status} → {new_status}")
 
-        self.order_repo.update_order_status(order, new_status)
+        # --------------------------------------------------
+        # PREVENT DUPLICATE TIMELINE ENTRY
+        # --------------------------------------------------
+        last_timeline = self.order_repo.get_last_timeline(order_id)
 
+        if last_timeline and last_timeline.status == new_status:
+            raise ValueError("Duplicate status update")
+
+        # --------------------------------------------------
+        # UPDATE ORDER STATUS
+        # --------------------------------------------------
+
+        order.status = new_status
+        order.status_updated_at = func.now()
+ 
+        # --------------------------------------------------
+        # ADD TIMELINE ENTRY
+        # --------------------------------------------------
+ 
+        self.order_repo.add_order_timeline(
+            order_id=order.id,
+            status=new_status
+        )
+
+        # --------------------------------------------------
+        # COMMIT TRANSACTION
+        # --------------------------------------------------
         self.db.commit()
 
         return {
-            "message": f"Order status updated to {new_status}"
+            "message": "Order status updated successfully",
+            "order_id": order.id,
+            "new_status": new_status
         }
     
     # ======================================================
@@ -563,4 +606,36 @@ class OrderService:
 
         return {
             "items": result
+        }
+    
+    # ======================================================
+    # GET ORDER TIMELINE
+    # ======================================================
+
+    def get_order_timeline(self, vendor_id: int, order_id: int):
+        """
+        Get order timeline (vendor view).
+        """
+
+        # -------------------------------
+        # VALIDATE ORDER OWNERSHIP
+        # -------------------------------
+        order = self.order_repo.get_vendor_order(vendor_id, order_id)
+
+        if not order:
+            raise ValueError("Order not found")
+
+        # -------------------------------
+        # FETCH TIMELINE
+        # -------------------------------
+        timeline = self.order_repo.get_order_timeline(order_id)
+
+        return {
+            "items": [
+                {
+                    "status": t.status,
+                    "created_at": str(t.created_at)
+                }
+                for t in timeline
+            ]
         }

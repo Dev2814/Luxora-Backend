@@ -40,6 +40,7 @@ from app.api.v1.orders.schemas import (
     UpdateOrderStatusRequest,
     VendorOrderDetailsResponse,
     VendorOrderListResponse,
+    OrderTimelineResponse
 )
 
 router = APIRouter(
@@ -189,6 +190,48 @@ def get_vendor_orders(
             status_code=500,
             detail="Unable to fetch vendor orders"
         )
+    
+# ======================================================
+# VENDOR ORDER TIMELINE
+# ======================================================
+
+@router.get(
+    "/vendor/{order_id}/timeline",
+    response_model=OrderTimelineResponse,
+    summary="Get Order Timeline"
+)
+def get_order_timeline(
+    order_id: int,
+    service: OrderService = Depends(get_order_service),
+    current_user=Depends(get_current_user)
+):
+    try:
+        # -------------------------------
+        # ROLE CHECK
+        # -------------------------------
+        if current_user["role"] != "vendor":
+            raise HTTPException(status_code=403, detail="Only vendors allowed")
+
+        # -------------------------------
+        # GET VENDOR PROFILE
+        # -------------------------------
+        vendor = service.db.query(VendorProfile).filter(
+            VendorProfile.user_id == current_user["user_id"]
+        ).first()
+
+        if not vendor:
+            raise HTTPException(status_code=404, detail="Vendor not found")
+
+        # -------------------------------
+        # FETCH TIMELINE
+        # -------------------------------
+        return service.get_order_timeline(
+            vendor.id,
+            order_id
+        )
+
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 # ======================================================
