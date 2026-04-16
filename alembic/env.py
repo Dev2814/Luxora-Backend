@@ -53,6 +53,10 @@ import app.models
 import app.models.coupon
 import app.models.coupon_usage
 
+# Notifications
+# import app.models.notification
+
+
 # this is the Alembic Config object
 config = context.config
 

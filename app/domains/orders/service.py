@@ -185,8 +185,26 @@ class OrderService:
             order_items = []
 
             for item in items:
+
                 variant = item.variant
+
+                if not variant:
+                    log_event(
+                        "checkout_variant_missing",
+                        level="warning",
+                        item_id=item.id
+                    )
+                    continue
+
                 product = variant.product
+
+                if not product:
+                    log_event(
+                        "checkout_product_missing",
+                        level="warning",
+                        item_id=item.id
+                    )
+                    continue
 
                 order_items.append({
                     "id": item.id,
@@ -334,7 +352,26 @@ class OrderService:
             for item in order.items:
 
                 variant = item.variant
+
+                if not variant:
+                    log_event(
+                        "order_list_variant_missing",
+                        level="warning",
+                        order_id=order.id,
+                        item_id=item.id
+                    )
+                    continue
+
                 product = variant.product
+
+                if not product:
+                    log_event(
+                        "order_list_product_missing",
+                        level="warning",
+                        order_id=order.id,
+                        item_id=item.id
+                    )
+                    continue
 
                 # -------------------------
                 # IMAGE
@@ -418,7 +455,26 @@ class OrderService:
         for item in order.items:
 
             variant = item.variant
+
+            if not variant:
+                log_event(
+                    "single_order_variant_missing",
+                    level="warning",
+                    order_id=order.id,
+                    item_id=item.id
+                )
+                continue
+
             product = variant.product
+
+            if not product:
+                log_event(
+                    "single_order_product_missing",
+                    level="warning",
+                    order_id=order.id,
+                    item_id=item.id
+                )
+                continue
 
             # IMAGE
             image_url = None
@@ -480,7 +536,14 @@ class OrderService:
 
         for item in order.items:
             variant = item.variant
+
+            if not variant:
+                continue
+
             product = variant.product
+
+            if not product:
+                continue
 
             # -------------------------------
             # GET PRIMARY IMAGE
