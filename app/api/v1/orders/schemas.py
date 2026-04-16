@@ -115,11 +115,23 @@ class VendorOrderItem(BaseModel):
     quantity: int
     price: float
     subtotal: float
+    image: str | None = None
 
 
 class VendorCustomerInfo(BaseModel):
     name: str
     email: str
+    phone: str | None = None
+
+
+class ShippingAddressResponse(BaseModel):
+    full_name: str | None = None
+    phone: str | None = None
+    address_line: str | None = None
+    city: str | None = None
+    state: str | None = None
+    postal_code: str | None = None
+    country: str | None = None
 
 
 class VendorOrderDetailsResponse(BaseModel):
@@ -130,6 +142,7 @@ class VendorOrderDetailsResponse(BaseModel):
     created_at: str
 
     customer: VendorCustomerInfo
+    shipping_address: ShippingAddressResponse
     items: List[VendorOrderItem]
 
 

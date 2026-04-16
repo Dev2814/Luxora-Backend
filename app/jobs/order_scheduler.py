@@ -27,11 +27,11 @@ def auto_update_orders(db: Session):
         # ==================================================
         now = datetime.now()
 
-        log_event(
-            "scheduler_cycle_started",
-            level="info",
-            timestamp=str(now)
-        )
+        # log_event(
+        #     "scheduler_cycle_started",
+        #     level="info",
+        #     timestamp=str(now)
+        # )
 
         # ==================================================
         # FETCH ACTIVE ORDERS ONLY
@@ -44,11 +44,11 @@ def auto_update_orders(db: Session):
             ])
         ).all()
 
-        log_event(
-            "scheduler_orders_fetched",
-            level="info",
-            total_orders=len(orders)
-        )
+        # log_event(
+        #     "scheduler_orders_fetched",
+        #     level="info",
+        #     total_orders=len(orders)
+        # )
 
         processed = 0
 
@@ -65,15 +65,15 @@ def auto_update_orders(db: Session):
             # ==================================================
             time_diff = now - last_update
 
-            log_event(
-                "debug_order_check",
-                level="info",
-                order_id=order.id,
-                status=status,
-                last_update=str(last_update),
-                now=str(now),
-                diff=str(time_diff)
-            )
+            # log_event(
+            #     "debug_order_check",
+            #     level="info",
+            #     order_id=order.id,
+            #     status=status,
+            #     last_update=str(last_update),
+            #     now=str(now),
+            #     diff=str(time_diff)
+            # )
 
             # ==================================================
             # PRODUCTION TIMING RULES
@@ -105,11 +105,11 @@ def auto_update_orders(db: Session):
                 order.status = OrderStatus.CONFIRMED
                 order.status_updated_at = now
 
-                log_event(
-                    "order_auto_confirmed",
-                    level="info",
-                    order_id=order.id
-                )
+                # log_event(
+                #     "order_auto_confirmed",
+                #     level="info",
+                #     order_id=order.id
+                # )
 
                 db.add(OrderTimeline(
                     order_id=order.id,
@@ -129,11 +129,11 @@ def auto_update_orders(db: Session):
                 order.status = OrderStatus.SHIPPED
                 order.status_updated_at = now
 
-                log_event(
-                    "order_auto_shipped",
-                    level="info",
-                    order_id=order.id
-                )
+                # log_event(
+                #     "order_auto_shipped",
+                #     level="info",
+                #     order_id=order.id
+                # )
 
                 db.add(OrderTimeline(
                     order_id=order.id,
@@ -153,11 +153,11 @@ def auto_update_orders(db: Session):
                 order.status = OrderStatus.DELIVERED
                 order.status_updated_at = now
 
-                log_event(
-                    "order_auto_delivered",
-                    level="info",
-                    order_id=order.id
-                )
+                # log_event(
+                #     "order_auto_delivered",
+                #     level="info",
+                #     order_id=order.id
+                # )
 
                 db.add(OrderTimeline(
                     order_id=order.id,
@@ -171,16 +171,17 @@ def auto_update_orders(db: Session):
         # ==================================================
         db.commit()
 
-        log_event(
-            "scheduler_cycle_completed",
-            level="info",
-            processed_orders=processed
-        )
+        # log_event(
+        #     "scheduler_cycle_completed",
+        #     level="info",
+        #     processed_orders=processed
+        # )
 
     except Exception as e:
-
-        log_event(
-            "scheduler_failed",
-            level="critical",
-            error=str(e)
-        )
+        print(f"Scheduler error: {e}")
+        
+    #     log_event(
+    #         "scheduler_failed",
+    #         level="critical",
+    #         error=str(e)
+    #     )

@@ -219,4 +219,10 @@ class ProductVariant(Base):
             "name",
             name="uq_variant_product_name"
         ),
+
+        # Prevent duplicate SLUG per Variants
+        UniqueConstraint(
+            "slug",
+            name="uq_variant_slug"
+        ),
     )

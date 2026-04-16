@@ -105,10 +105,18 @@ class ProductService:
             # -----------------------------
             if payload.variants:
                 for var in payload.variants:
+                    base_slug = slugify(f"{product.name}-{var.name}")
+                    variant_slug = base_slug
+
+                    counter = 1
+                    while self.db.query(ProductVariant).filter(ProductVariant.slug == variant_slug).first():
+                        variant_slug = f"{base_slug}-{counter}"
+                        counter += 1
 
                     variant = ProductVariant(
                         product_id=product.id,
                         name=var.name,
+                        slug=variant_slug,
                         sku=self._generate_sku(product.id),
                         price=var.price
                     )

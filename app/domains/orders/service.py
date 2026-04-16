@@ -28,7 +28,7 @@ Routes → Service → Repository → Database
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.models.order import Order
+from app.models.order import Order, OrderStatus
 from app.models.order_item import OrderItem
 from app.models.inventory import Inventory
 from app.models.product_variant import ProductVariant
@@ -482,14 +482,62 @@ class OrderService:
             variant = item.variant
             product = variant.product
 
+            # -------------------------------
+            # GET PRIMARY IMAGE
+            # -------------------------------
+            primary_image = None
+
+            if product and product.images:
+                for img in product.images:
+                    if not img.is_deleted and img.is_primary:
+                        primary_image = img.image_url
+                        break
+
+                # fallback (optional but safe)
+                if not primary_image:
+                    for img in product.images:
+                        if not img.is_deleted:
+                            primary_image = img.image_url
+                            break
+
             items.append({
                 "product_name": product.name,
                 "variant_name": variant.name,
                 "quantity": item.quantity,
                 "price": float(item.price_snapshot),
                 "subtotal": float(item.subtotal),
+                "image": primary_image   
             })
 
+        # -------------------------------
+        # CUSTOMER INFO
+        # -------------------------------
+        customer_profile = order.user.customer_profile
+
+        customer_phone = order.user.phone if hasattr(order.user, "phone") else None
+
+        # -------------------------------
+        # SHIPPING ADDRESS
+        # -------------------------------
+        address = order.address
+
+        shipping_address = {
+            "full_name": address.full_name if address else None,
+            "phone": address.phone_number if address else None,
+            "address_line": (
+                f"{address.address_line1}, {address.address_line2}"
+                if address and address.address_line2
+                else address.address_line1 if address else None
+            ),
+            "city": address.city if address else None,
+            "state": address.state if address else None,
+            "postal_code": address.postal_code if address else None,
+            "country": address.country if address else None,
+        }
+
+        # -------------------------------
+        # FINAL RESPONSE
+        # -------------------------------
         return {
             "order_id": order.id,
             "status": order.status.value,
@@ -498,13 +546,16 @@ class OrderService:
             "created_at": str(order.created_at),
 
             "customer": {
-                "name": order.user.customer_profile.full_name if order.user.customer_profile else "Guest",
-                "email": order.user.email
+                "name": customer_profile.full_name if customer_profile else "Guest",
+                "email": order.user.email,
+                "phone": customer_phone
             },
+
+            "shipping_address": shipping_address,
 
             "items": items
         }
-    
+
     # ======================================================
     # UPDATE ORDER STATUS
     # ======================================================
@@ -542,6 +593,15 @@ class OrderService:
             "delivered": [],
             "cancelled": []
         }
+        # --------------------------------------------------
+        # IGNORE SAME STATUS UPDATE
+        # --------------------------------------------------
+        if current_status == new_status:
+            return {
+                "message": "Order already in this status",
+                "order_id": order.id,
+                "current_status": current_status
+            }
 
         if new_status not in VALID_TRANSITIONS.get(current_status, []):
             raise ValueError(f"Invalid transition: {current_status} → {new_status}")
@@ -558,7 +618,7 @@ class OrderService:
         # UPDATE ORDER STATUS
         # --------------------------------------------------
 
-        order.status = new_status
+        order.status = OrderStatus(new_status)
         order.status_updated_at = func.now()
  
         # --------------------------------------------------
