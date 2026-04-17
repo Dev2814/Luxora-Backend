@@ -26,7 +26,7 @@ Dummy Frontend/
 Payment-Frontend/
 
 # Alembic
-alembic/versions/
+alembic/
 alembic.ini
 
 # OS files
