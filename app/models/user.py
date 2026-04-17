@@ -331,6 +331,11 @@ class User(Base):
         passive_deletes=True
     )
 
+    notifications = relationship(
+        "Notification",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 
     # ==================================================
     # DATABASE INDEXES

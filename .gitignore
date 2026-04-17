@@ -32,6 +32,7 @@ alembic.ini
 # OS files
 .DS_Store
 Thumbs.db
+luxora-b0770-firebase-adminsdk-fbsvc-915c7474c0.json
 
 # IDE
 .vscode/

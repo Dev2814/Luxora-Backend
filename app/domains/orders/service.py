@@ -34,6 +34,7 @@ from app.models.inventory import Inventory
 from app.models.product_variant import ProductVariant
 from app.models.product import Product
 from app.models.product_attribute import ProductAttributeValue
+from app.models.notification import Notification
 
 from app.domains.orders.repository import OrderRepository
 from app.domains.cart.repository import CartRepository
@@ -43,6 +44,7 @@ from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.sql import func
 
 from app.infrastructure.invoice.service import InvoiceService
+from app.infrastructure.firebase.fcm import send_push_notification
 
 
 class OrderService:
@@ -173,6 +175,88 @@ class OrderService:
             self.db.commit()
 
             self.db.refresh(order)
+
+            # =========================================================
+            # VENDOR NOTIFICATION (NEW ORDER)
+            # =========================================================
+
+            try:
+
+                vendor_notifications = []
+
+                for item in order.items:
+
+                    variant = item.variant
+                    product = variant.product
+                    vendor = product.vendor
+                    vendor_user = vendor.user
+
+                    # Avoid duplicate notifications per vendor
+                    if vendor_user.id in vendor_notifications:
+                        continue
+
+                    vendor_notifications.append(vendor_user.id)
+
+                    # Customer name
+                    customer_name = (
+                        order.user.customer_profile.full_name
+                        if order.user.customer_profile else "Customer"
+                    )
+
+                    # Build notification content
+                    notif_title = "New Order Received"
+                    notif_message = (
+                        f"{customer_name} placed an order for "
+                        f"{product.name} ({variant.name})"
+                    )
+
+                    # --------------------------------------------------
+                    # WRITE DB NOTIFICATION
+                    # --------------------------------------------------
+                    notification = Notification(
+                        user_id=vendor_user.id,
+                        title=notif_title,
+                        message=notif_message,
+                        reference_id=order.id,
+                        reference_type="order"
+                    )
+
+                    self.db.add(notification)
+
+                    # --------------------------------------------------
+                    # SEND FCM PUSH NOTIFICATION (FIREBASE)
+                    # --------------------------------------------------
+                    fcm_token = getattr(vendor, "fcm_token", None)
+
+                    if fcm_token:
+                        send_push_notification(
+                            fcm_token=fcm_token,
+                            title=notif_title,
+                            body=notif_message,
+                            data={
+                                "type": "new_order",
+                                "order_id": str(order.id),
+                                "product_name": product.name,
+                                "variant_name": variant.name
+                            }
+                        )
+
+                self.db.commit()
+
+                log_event(
+                    "vendor_notifications_created",
+                    order_id=order.id,
+                    vendors_notified=len(vendor_notifications)
+                )
+
+            except Exception as e:
+
+                log_event(
+                    "vendor_notification_failed",
+                    level="error",
+                    order_id=order.id,
+                    error=str(e)
+                )
 
             log_event(
                 "order_created",

@@ -118,6 +118,14 @@ class Settings(BaseSettings):
     API_RATE_LIMIT: int = 100
 
     # --------------------------------------------------
+    # Firebase Configuration
+    # --------------------------------------------------
+
+    FIREBASE_CREDENTIALS_PATH: Optional[str] = Field(
+        default=None,
+        description="Path to Firebase service account JSON file")
+
+    # --------------------------------------------------
     # SETTINGS CONFIG
     # --------------------------------------------------
 

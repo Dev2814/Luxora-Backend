@@ -18,6 +18,7 @@ from app.api.v1.payments.routes import router as payments_router
 from app.api.v1.wishlist.routes import router as wishlist_router
 from app.api.v1.reviews.routes import router as reviews_router
 from app.api.v1.coupons.routes import router as coupons_router
+from app.api.v1.notifications.routes import router as notifications_router
 
 
 
@@ -60,3 +61,5 @@ api_router.include_router(wishlist_router)
 api_router.include_router(reviews_router)
 
 api_router.include_router(coupons_router)
+
+api_router.include_router(notifications_router)
