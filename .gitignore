@@ -27,6 +27,7 @@ Payment-Frontend/
 
 # Alembic
 alembic/
+luxora-backend\alembic
 alembic.ini
 
 # OS files

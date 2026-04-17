@@ -70,7 +70,3 @@ async def handle_stripe_webhook(request: Request):
 
     finally:
         db.close()
-
-
-# stripe listen --forward-to localhost:8000/api/v1/payments/webhook
-# stripe listen --forward-to localhost:2814/api/v1/payments/webhook
