@@ -98,11 +98,27 @@ class PaymentService:
         order.payment_status = OrderPaymentStatus.PAID
         order.status = OrderStatus.CONFIRMED
 
+        order.payment_method = "Stripe"
+
         self.db.commit()
         self.db.refresh(payment)
 
+        if not order.address:
+            log_event(
+                "invoice_missing_address",
+                level="warning",
+                order_id=order.id
+            )
+
         try:
-            self.invoice_service.create_invoice(order)
+            pdf_path = self.invoice_service.create_invoice(order.id)
+
+            log_event(
+                "invoice_generated_success",
+                order_id=order.id,
+                pdf_path=pdf_path
+            )
+
         except Exception as e:
             log_event(
                 "invoice_generation_failed",
