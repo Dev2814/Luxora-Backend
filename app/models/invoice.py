@@ -20,6 +20,7 @@ Order
 from sqlalchemy import (
     Column,
     Integer,
+    Numeric,
     String,
     ForeignKey,
     DateTime,
@@ -49,6 +50,11 @@ class Invoice(Base):
         String(50),
         nullable=False,
         unique=True
+    )
+
+    total_amount = Column(
+        Numeric(10, 2),
+        nullable=False
     )
 
     pdf_path = Column(

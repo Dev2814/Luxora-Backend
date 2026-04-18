@@ -39,11 +39,14 @@ from app.models.notification import Notification
 from app.domains.orders.repository import OrderRepository
 from app.domains.cart.repository import CartRepository
 
+from datetime import datetime
+import uuid
+
 from app.core.logger import log_event
 from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.sql import func
 
-from app.infrastructure.invoice.service import InvoiceService
+from app.domains.invoice.service import InvoiceService
 from app.infrastructure.firebase.fcm import send_push_notification
 
 
@@ -58,6 +61,9 @@ class OrderService:
         self.cart_repo = CartRepository(db)
 
         self.invoice_service = InvoiceService(self.db)
+
+    def generate_order_number(self):
+        return f"ORD-{datetime.utcnow().year}-{uuid.uuid4().hex[:8].upper()}"
 
     # ======================================================
     # CREATE ORDER FROM CART (CHECKOUT)
@@ -124,7 +130,8 @@ class OrderService:
             order = Order(
                 user_id=user_id,
                 address_id=address_id,
-                total_amount=total_amount
+                total_amount=total_amount,
+                order_number=self.generate_order_number()
             )
 
             order = self.order_repo.create_order(order)
@@ -375,7 +382,8 @@ class OrderService:
             order = Order(
                 user_id=user_id,
                 address_id=address_id,
-                total_amount=subtotal
+                total_amount=subtotal,
+                order_number=self.generate_order_number()
             )
 
             order = self.order_repo.create_order(order)

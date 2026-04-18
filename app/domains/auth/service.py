@@ -280,6 +280,27 @@ class AuthService:
             )
         )
 
+        try:
+            send_email(
+                to_email=user.email,
+                subject="New Login Detected — Luxora",
+                template_name="login_alert.html",
+                context={
+                    "title": "New Login Detected",
+                    "login_time": datetime.utcnow().strftime("%d %b %Y, %I:%M %p UTC"),
+                    "ip": ip,
+                    "user_agent": user_agent,
+                    "year": datetime.utcnow().year,
+                }
+            )
+        except Exception as email_error:
+            log_event(
+                "login_alert_email_failed",
+                level="error",
+                user_id=user.id,
+                error=str(email_error)
+            )
+
         log_event(
             "user_logged_in",
             user_id=user.id,
@@ -307,21 +328,37 @@ class AuthService:
 
         otp = generate_secure_otp()
 
-        print(f"Generated RESEND OTP for {purpose}: {otp}")  # Debug log
-
         if purpose == "login":
 
             store_login_otp(user.id, otp)
 
-            template = "login_otp.html"
-            subject = "Luxora Login Verification Code"
+            subject = "Your Luxora Login Code"
+            context = {
+                "otp": otp,
+                "title": "Login Verification Code",
+                "eyebrow": "LOGIN VERIFICATION",
+                "headline": "Your login",
+                "headline_accent": "code.",
+                "subtitle": "Use the code below to complete your sign-in. This code is valid for 10 minutes.",
+                "purpose_label": "a login attempt on your Luxora account",
+                "year": datetime.utcnow().year,
+            }
 
         elif purpose == "reset":
 
             store_reset_otp(user.id, otp)
 
-            template = "forgot_password.html"
-            subject = "Password Reset OTP"
+            subject = "Your Luxora Password Reset Code"
+            context = {
+                "otp": otp,
+                "title": "Password Reset Code",
+                "eyebrow": "PASSWORD RESET",
+                "headline": "Reset your",
+                "headline_accent": "password.",
+                "subtitle": "Use the code below to reset your password. This code is valid for 10 minutes.",
+                "purpose_label": "a password reset request on your Luxora account",
+                "year": datetime.utcnow().year,
+            }
 
         else:
             raise ValueError("Invalid OTP purpose")
@@ -329,12 +366,8 @@ class AuthService:
         send_email(
             to_email=email,
             subject=subject,
-            template_name=template,
-            context={
-                "otp": otp,
-                "title": "Luxora Verification",
-                "year": datetime.utcnow().year
-            }
+            template_name="otp_email.html",
+            context=context
         )
 
         log_event(

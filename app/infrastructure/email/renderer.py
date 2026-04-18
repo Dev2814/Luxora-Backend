@@ -59,6 +59,6 @@ def render_template(template_name: str, context: Dict[str, Any]) -> str:
 
         return "<h3>Email template missing</h3>"
 
-    except Exception:
-
+    except Exception as e:
+        print(f"Template render error: {e}")
         return "<h3>Email rendering error</h3>"

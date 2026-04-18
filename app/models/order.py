@@ -44,6 +44,8 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base
+import uuid
+from sqlalchemy import String
 
 import enum
 
@@ -134,6 +136,17 @@ class Order(Base):
         Enum(PaymentStatus),
         default=PaymentStatus.PENDING,
         nullable=False
+    )
+
+    # ==================================================
+    # ORDER NUMBER 
+    # ==================================================
+
+    order_number = Column(
+        String(50),
+        unique=True,
+        nullable=False,
+        index=True
     )
 
     # ==================================================

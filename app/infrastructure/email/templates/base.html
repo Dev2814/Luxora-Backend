@@ -1,27 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>{{ title if title else "Luxora" }}</title>
+  <!--[if mso]>
+  <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+  <![endif]-->
 </head>
+<body style="margin:0;padding:0;background-color:#EDEAE4;font-family:Arial,sans-serif;-webkit-font-smoothing:antialiased;">
 
-<body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f4f6f8;">
-  
-  <div style="max-width:600px;margin:auto;background:#ffffff;padding:20px;">
-    
-    <div style="text-align:center;padding:10px 0;">
-      <h2 style="color:#111;">Luxora</h2>
-    </div>
+  <!-- OUTER WRAPPER -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EDEAE4;">
+    <tr>
+      <td align="center" style="padding:48px 16px;">
 
-    {% block content %}{% endblock %}
+        <!-- EMAIL CONTAINER -->
+        <table role="presentation" width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;background-color:#ffffff;border-radius:3px;overflow:hidden;">
 
-    <hr style="margin:30px 0;">
+          <!-- HEADER -->
+          <tr>
+            <td style="background-color:#0D1B2A;padding:36px 48px 32px 48px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:700;letter-spacing:8px;color:#F5F1EB;text-transform:uppercase;line-height:1;">LUXORA</div>
+                    <div style="font-family:Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:5px;color:#C9A36F;text-transform:uppercase;margin-top:6px;">PREMIUM MARKETPLACE</div>
+                    <div style="width:28px;height:1px;background-color:#C9A36F;margin-top:20px;opacity:0.7;"></div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-    <p style="font-size:12px;color:#888;text-align:center;">
-      © {{ year if year else "2026" }} Luxora. All rights reserved.
-    </p>
+          <!-- CONTENT BLOCK -->
+          <tr>
+            <td style="padding:48px 48px 40px 48px;">
+              {% block content %}{% endblock %}
+            </td>
+          </tr>
 
-  </div>
+          <!-- FOOTER -->
+          <tr>
+            <td style="background-color:#F7F4F0;border-top:1px solid #E8E3DB;padding:26px 48px 30px 48px;text-align:center;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="padding-bottom:12px;">
+                    <a href="#" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Help &amp; Support</a>
+                    <span style="color:#C9A36F;font-size:10px;">&nbsp;&middot;&nbsp;</span>
+                    <a href="#" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Privacy Policy</a>
+                    <span style="color:#C9A36F;font-size:10px;">&nbsp;&middot;&nbsp;</span>
+                    <a href="#" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Terms of Service</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <p style="font-family:Arial,sans-serif;font-size:11px;color:#B0A89E;margin:0 0 4px 0;">
+                      &copy; {{ year if year else "2026" }} Luxora Technologies Pvt. Ltd. All rights reserved.
+                    </p>
+                    <p style="font-family:Arial,sans-serif;font-size:10px;color:#C0B8AE;margin:0;">
+                      This email was sent to you as a registered member of Luxora.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+        <!-- END EMAIL CONTAINER -->
+
+      </td>
+    </tr>
+  </table>
 
 </body>
 </html>

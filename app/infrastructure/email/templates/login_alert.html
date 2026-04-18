@@ -2,37 +2,251 @@
 
 {% block content %}
 
-<h2>🔐 New Login Detected</h2>
-
-<p>Hello,</p>
-
-<p>
-A new login to your Luxora account was detected.
-</p>
-
-<table style="margin-top:20px;">
-<tr>
-<td><strong>Time:</strong></td>
-<td>{{ login_time }}</td>
-</tr>
-
-<tr>
-<td><strong>IP Address:</strong></td>
-<td>{{ ip }}</td>
-</tr>
-
-<tr>
-<td><strong>Device:</strong></td>
-<td>{{ user_agent }}</td>
-</tr>
+<!-- EYEBROW -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+    <tr>
+        <td>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;
+                    </td>
+                    <td
+                        style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">
+                        SECURITY NOTICE</td>
+                    <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
 </table>
 
-<p style="margin-top:20px;">
-If this was you, no action is needed.
-</p>
+<!-- HEADLINE -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
+    <tr>
+        <td>
+            <div
+                style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
+                New Login<br><span style="color:#C9A36F;">Detected.</span>
+            </div>
+        </td>
+    </tr>
+</table>
 
-<p style="color:#b00020;">
-If this wasn't you, please reset your password immediately.
-</p>
+<!-- SUBTITLE -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+    <tr>
+        <td>
+            <p
+                style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
+                A new sign-in to your Luxora account was detected. Review the details below and take action if this
+                wasn't you.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- STATUS BADGE -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+    <tr>
+        <td style="background-color:#EFF6FF;border:1px solid #BFDBFE;border-radius:100px;padding:7px 16px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td style="width:7px;height:7px;background-color:#2563EB;border-radius:50%;vertical-align:middle;">
+                    </td>
+                    <td
+                        style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#1D4ED8;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">
+                        LOGIN ACTIVITY RECORDED</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- DIVIDER -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 26px 0;">
+    <tr>
+        <td style="height:1px;background-color:#EDE8E0;line-height:1px;font-size:1px;">&nbsp;</td>
+    </tr>
+</table>
+
+<!-- LOGIN DETAILS LABEL -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+    <tr>
+        <td>
+            <p
+                style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">
+                LOGIN DETAILS</p>
+        </td>
+    </tr>
+</table>
+
+<!-- LOGIN INFO CARD -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+    <tr>
+        <td style="border-left:3px solid #C9A36F;background-color:#F8F6F2;border-radius:0 4px 4px 0;">
+
+            <!-- Time -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td style="padding:14px 20px 0 20px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td
+                                    style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;vertical-align:middle;">
+                                    Time</td>
+                                <td align="right"
+                                    style="font-family:Georgia,'Times New Roman',serif;font-size:14px;font-weight:700;color:#0D1B2A;">
+                                    {{ login_time }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Divider -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td style="padding:10px 20px 0 20px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td style="height:1px;background-color:#EDE8E0;line-height:1px;font-size:1px;">&nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- IP Address -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td style="padding:10px 20px 0 20px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td
+                                    style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;vertical-align:middle;">
+                                    IP Address</td>
+                                <td align="right" style="font-family:Arial,sans-serif;font-size:13px;color:#1F2937;">{{
+                                    ip }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Divider -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td style="padding:10px 20px 0 20px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td style="height:1px;background-color:#EDE8E0;line-height:1px;font-size:1px;">&nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Device -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td style="padding:10px 20px 16px 20px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td
+                                    style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;vertical-align:top;">
+                                    Device</td>
+                                <td align="right"
+                                    style="font-family:Arial,sans-serif;font-size:12px;color:#1F2937;line-height:1.5;">
+                                    {{ user_agent }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+<!-- DIVIDER -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 26px 0;">
+    <tr>
+        <td style="height:1px;background-color:#EDE8E0;line-height:1px;font-size:1px;">&nbsp;</td>
+    </tr>
+</table>
+
+<!-- IF THIS WAS YOU -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+    <tr>
+        <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td
+                        style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">
+                        &#10003;</td>
+                </tr>
+            </table>
+        </td>
+        <td style="vertical-align:top;">
+            <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">This
+                was you?</p>
+            <p
+                style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">
+                No action is needed. You can safely ignore this email.</p>
+        </td>
+    </tr>
+</table>
+
+<!-- IF THIS WAS NOT YOU -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+    <tr>
+        <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td
+                        style="width:28px;height:28px;background-color:#B00020;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#ffffff;line-height:28px;">
+                        !</td>
+                </tr>
+            </table>
+        </td>
+        <td style="vertical-align:top;">
+            <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#B00020;margin:0 0 3px 0;">This
+                wasn't you?</p>
+            <p
+                style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">
+                Reset your password immediately to secure your account. Do not delay.</p>
+        </td>
+    </tr>
+</table>
+
+<!-- CTA BUTTON -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
+    <tr>
+        <td align="center">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td style="background-color:#0D1B2A;border-radius:2px;border-bottom:2px solid #C9A36F;">
+                        <a href="#"
+                            style="display:inline-block;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#F5F1EB;text-decoration:none;padding:14px 32px;">RESET
+                            MY PASSWORD</a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- CTA NOTE -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td align="center">
+            <p style="font-family:Arial,sans-serif;font-size:11px;color:#9CA3AF;margin:0;">If you need help, our
+                security team is available 24/7.</p>
+        </td>
+    </tr>
+</table>
 
 {% endblock %}

@@ -27,6 +27,9 @@ from datetime import datetime
 import qrcode
 from PIL import Image as PILImage
 
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4
@@ -44,6 +47,16 @@ from reportlab.platypus import (
     Spacer,
     Table,
     TableStyle,
+)
+
+FONT_DIR = os.path.join(os.path.dirname(__file__), "fonts")
+
+pdfmetrics.registerFont(
+    TTFont("DejaVuSans", os.path.join(FONT_DIR, "DejaVuSans.ttf"))
+)
+
+pdfmetrics.registerFont(
+    TTFont("DejaVuSans-Bold", os.path.join(FONT_DIR, "DejaVuSans-Bold.ttf"))
 )
 
 # ── Try to read INVOICE_DIR from environment; fall back to sibling "invoices/" ──
@@ -124,9 +137,9 @@ def _make_qr_buf(data: str, size_px: int = 280) -> io.BytesIO:
 # ─────────────────────────────────────────────
 
 def _build_styles() -> dict:
-    BF = "Helvetica-Bold"
-    RF = "Helvetica"
-    RI = "Helvetica-Oblique"
+    BF = "DejaVuSans-Bold"
+    RF = "DejaVuSans"
+    # RI = "DejaVuSans"
 
     return {
         "section_heading": ParagraphStyle("section_heading", fontName=BF, fontSize=7.5,
@@ -201,26 +214,26 @@ class _LuxoraCanvas(rl_canvas.Canvas):
 
         # Brand name
         self.setFillColor(WHITE)
-        self.setFont("Helvetica-Bold", 26)
+        self.setFont("DejaVuSans-Bold", 26)
         self.drawString(MARGIN, PAGE_H - 18 * mm, "LUXORA")
 
         # Tagline
         self.setFillColor(GOLD)
-        self.setFont("Helvetica", 8)
+        self.setFont("DejaVuSans", 8)
         self.drawString(MARGIN, PAGE_H - 24 * mm, "PREMIUM FASHION  ·  EST. 2024")
 
         # "INVOICE" label (right)
         self.setFillColor(WHITE)
-        self.setFont("Helvetica-Bold", 20)
+        self.setFont("DejaVuSans-Bold", 20)
         self.drawRightString(PAGE_W - MARGIN, PAGE_H - 16 * mm, "INVOICE")
 
         # Invoice number
-        self.setFont("Helvetica-Bold", 8)
+        self.setFont("DejaVuSans-Bold", 8)
         self.setFillColor(GOLD)
         self.drawRightString(PAGE_W - MARGIN, PAGE_H - 23 * mm, self._invoice_number)
 
         # Invoice date
-        self.setFont("Helvetica", 8)
+        self.setFont("DejaVuSans", 8)
         self.setFillColor(MID_GREY)
         self.drawRightString(PAGE_W - MARGIN, PAGE_H - 29 * mm, self._invoice_date)
 
@@ -234,7 +247,7 @@ class _LuxoraCanvas(rl_canvas.Canvas):
         self.line(MARGIN, y_rule, PAGE_W - MARGIN, y_rule)
 
         # Thank-you
-        self.setFont("Helvetica", 8)
+        self.setFont("DejaVuSans", 8)
         self.setFillColor(DARK_GREY)
         self.drawCentredString(
             PAGE_W / 2, y_rule - 4 * mm,
@@ -242,7 +255,7 @@ class _LuxoraCanvas(rl_canvas.Canvas):
         )
 
         # Legal note
-        self.setFont("Helvetica-Oblique", 7)
+        self.setFont("DejaVuSans", 7)
         self.setFillColor(MID_GREY)
         self.drawCentredString(
             PAGE_W / 2, y_rule - 8 * mm,
@@ -250,7 +263,7 @@ class _LuxoraCanvas(rl_canvas.Canvas):
         )
 
         # Page number
-        self.setFont("Helvetica", 7.5)
+        self.setFont("DejaVuSans", 7.5)
         self.drawRightString(PAGE_W - MARGIN, y_rule - 8 * mm, f"Page {page_num} of {total_pages}")
 
 
@@ -258,7 +271,7 @@ class _LuxoraCanvas(rl_canvas.Canvas):
 #  MAIN PUBLIC FUNCTION
 # ─────────────────────────────────────────────
 
-def generate_invoice(order, invoice_number: str, invoice_date: str) -> str:
+def generate_invoice(order, invoice_number: str, invoice_date) -> str:
     """
     Generate a production-grade Luxora invoice PDF.
 
@@ -281,6 +294,8 @@ def generate_invoice(order, invoice_number: str, invoice_date: str) -> str:
     Any exception from reportlab / IO is allowed to propagate so that
     InvoiceService can catch it and log it correctly.
     """
+    if isinstance(invoice_date, datetime):
+        invoice_date = invoice_date.strftime("%d %b %Y")
 
     os.makedirs(INVOICE_DIR, exist_ok=True)
 
@@ -291,7 +306,7 @@ def generate_invoice(order, invoice_number: str, invoice_date: str) -> str:
     # QR code (in-memory)
     qr_data = (
         f"Luxora Order Verification\n"
-        f"Order ID  : #LUX-ORD-{order.id}\n"
+        f"Order ID  : {order.order_number}\n"
         f"Invoice   : #LUX-INV-{invoice_number}\n"
         f"Date      : {invoice_date}"
     )
@@ -373,7 +388,7 @@ def generate_invoice(order, invoice_number: str, invoice_date: str) -> str:
     status_label = str(order_status).replace("_", " ").title() if order_status else "Confirmed"
 
     detail_rows = [
-        [Paragraph("Order ID",   S["info_key"]), Paragraph(f"#{order.id}",   S["info_val"])],
+        [Paragraph("Order ID",   S["info_key"]), Paragraph(order.order_number,   S["info_val"])],
         [Paragraph("Invoice No", S["info_key"]), Paragraph(invoice_number,   S["info_val"])],
         [Paragraph("Date",       S["info_key"]), Paragraph(invoice_date,     S["info_val"])],
         [Paragraph("Status",     S["info_key"]), Paragraph(status_label,     S["info_val"])],
@@ -427,7 +442,7 @@ def generate_invoice(order, invoice_number: str, invoice_date: str) -> str:
 
     # col_widths = [8 * mm, CW * 0.40, 18 * mm, CW * 0.18, CW * 0.20]
     col_widths = [
-        8 * mm,        # #
+        15 * mm,        # #
         CW * 0.28,     # PRODUCT
         18 * mm,       # QTY
         CW * 0.14,     # MRP
@@ -437,13 +452,13 @@ def generate_invoice(order, invoice_number: str, invoice_date: str) -> str:
     ]
 
     header_row = [
-        Paragraph("#",          S["th"]),
+        Paragraph("NO.",          S["th"]),
         Paragraph("PRODUCT",    S["th"]),
         Paragraph("QTY",        S["th"]),
         Paragraph("MRP",        S["th"]),          # compare_price
         Paragraph("PRICE",      S["th"]),          # selling price
         Paragraph("DISCOUNT",   S["th"]),          # new
-        Paragraph("SUBTOTAL",   S["th"]),
+        Paragraph("TOTAL",   S["th"]),
     ]
     rows  = [header_row]
     total = 0.0
@@ -473,10 +488,11 @@ def generate_invoice(order, invoice_number: str, invoice_date: str) -> str:
         unit_price = float(item.price_snapshot)
         compare_price = float(getattr(item.variant.product, "compare_price", 0) or 0)
         quantity = item.quantity
-        discount_per_unit = compare_price - unit_price if compare_price > unit_price else 0
+        # discount_per_unit = compare_price - unit_price if compare_price > unit_price else 0
+        discount_per_unit = max(compare_price - unit_price, 0)
         discount = discount_per_unit * quantity
         
-        subtotal = unit_price * quantity
+        subtotal = compare_price * quantity
         total += subtotal
         total_discount += discount 
 
@@ -514,7 +530,8 @@ def generate_invoice(order, invoice_number: str, invoice_date: str) -> str:
 
     # ── Totals + QR side-by-side ───────────────────────────────────────────
 
-    grand_total = total
+    grand_total = total - total_discount
+    # grand_total = total - total_discount
 
     totals_data = [
         [Paragraph("Subtotal",                S["total_k"]), Paragraph(_fmt_inr(total),       S["total_v"])],

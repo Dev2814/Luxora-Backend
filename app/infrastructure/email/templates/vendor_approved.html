@@ -1,11 +1,158 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>🎉 Congratulations!</h3>
 
-<p>Your business <strong>{{ business_name }}</strong> has been approved.</p>
+<!-- EYEBROW -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+  <tr>
+    <td>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
+          <td style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">VENDOR VERIFICATION</td>
+          <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
 
-<p>You can now start selling on Luxora.</p>
+<!-- HEADLINE -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
+  <tr>
+    <td>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
+        Welcome to<br><span style="color:#C9A36F;">Luxora.</span>
+      </div>
+    </td>
+  </tr>
+</table>
 
-<p>Login to your vendor dashboard to begin.</p>
+<!-- SUBTITLE -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+  <tr>
+    <td>
+      <p style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
+        Your vendor application has been reviewed and approved by our team.
+        You're now a verified seller on Luxora's premium marketplace.
+      </p>
+    </td>
+  </tr>
+</table>
+
+<!-- STATUS BADGE -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+  <tr>
+    <td style="background-color:#F0FDF4;border:1px solid #86EFAC;border-radius:100px;padding:7px 16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="width:7px;height:7px;background-color:#16A34A;border-radius:50%;vertical-align:middle;"></td>
+          <td style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#15803D;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">ACCOUNT VERIFIED &amp; ACTIVE</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<!-- BRAND CARD -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+  <tr>
+    <td style="border-left:3px solid #C9A36F;background-color:#F8F6F2;border-radius:0 4px 4px 0;padding:16px 20px;">
+      <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:#9B8E7E;text-transform:uppercase;margin:0 0 5px 0;">APPROVED BUSINESS</p>
+      <p style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#0D1B2A;margin:0;">{{ business_name }}</p>
+    </td>
+  </tr>
+</table>
+
+<!-- DIVIDER -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 26px 0;">
+  <tr>
+    <td style="height:1px;background-color:#EDE8E0;line-height:1px;font-size:1px;">&nbsp;</td>
+  </tr>
+</table>
+
+<!-- NEXT STEPS LABEL -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+  <tr>
+    <td>
+      <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">WHAT HAPPENS NEXT</p>
+    </td>
+  </tr>
+</table>
+
+<!-- STEP 01 -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+  <tr>
+    <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">01</td>
+        </tr>
+      </table>
+    </td>
+    <td style="vertical-align:top;">
+      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Access Your Dashboard</p>
+      <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Log in to your vendor portal to get started with your seller account.</p>
+    </td>
+  </tr>
+</table>
+
+<!-- STEP 02 -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+  <tr>
+    <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">02</td>
+        </tr>
+      </table>
+    </td>
+    <td style="vertical-align:top;">
+      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">List Your Products</p>
+      <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Upload your catalog — add images, descriptions, pricing, and inventory details.</p>
+    </td>
+  </tr>
+</table>
+
+<!-- STEP 03 -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+  <tr>
+    <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">03</td>
+        </tr>
+      </table>
+    </td>
+    <td style="vertical-align:top;">
+      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Start Selling</p>
+      <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Go live instantly. Reach thousands of premium buyers across the platform.</p>
+    </td>
+  </tr>
+</table>
+
+<!-- CTA BUTTON -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
+  <tr>
+    <td align="center">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="background-color:#0D1B2A;border-radius:2px;border-bottom:2px solid #C9A36F;">
+            <a href="#" style="display:inline-block;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#F5F1EB;text-decoration:none;padding:14px 32px;">GO TO VENDOR DASHBOARD</a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<!-- CTA NOTE -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td align="center">
+      <p style="font-family:Arial,sans-serif;font-size:11px;color:#9CA3AF;margin:0;">If you have questions, our seller support team is here to help.</p>
+    </td>
+  </tr>
+</table>
+
 {% endblock %}

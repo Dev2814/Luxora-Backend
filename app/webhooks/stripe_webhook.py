@@ -54,7 +54,7 @@ async def handle_stripe_webhook(request: Request):
             payment_intent = event["data"]["object"]
             payment_intent_id = payment_intent["id"]
 
-            payment_service.handle_payment_success(payment_intent_id)
+            payment_service.handle_payment_success(payment_intent)
 
         # ---------------------------------------------------
         # PAYMENT FAILED

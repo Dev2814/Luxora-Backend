@@ -24,7 +24,7 @@ from app.models.order import OrderStatus
 from app.domains.payments.repository import PaymentRepository
 from app.domains.orders.repository import OrderRepository
 
-from app.infrastructure.invoice.service import InvoiceService
+from app.domains.invoice.service import InvoiceService
 from app.core.logger import log_event
 
 
@@ -84,48 +84,101 @@ class PaymentService:
     # HANDLE PAYMENT SUCCESS
     # ======================================================
 
-    def handle_payment_success(self, payment_intent_id: str):
-
-        payment = self.payment_repo.get_by_payment_intent(payment_intent_id)
-
-        if not payment or payment.status == PaymentStatus.PAID:
-            return
-
-        payment.status = PaymentStatus.PAID
-        payment.transaction_id = payment_intent_id
-
-        order = payment.order
-        order.payment_status = OrderPaymentStatus.PAID
-        order.status = OrderStatus.CONFIRMED
-
-        order.payment_method = "Stripe"
-
-        self.db.commit()
-        self.db.refresh(payment)
-
-        if not order.address:
-            log_event(
-                "invoice_missing_address",
-                level="warning",
-                order_id=order.id
-            )
+    def handle_payment_success(self, payment_intent: dict):
 
         try:
-            pdf_path = self.invoice_service.create_invoice(order.id)
+            payment_intent_id = payment_intent["id"]
 
+            # ============================================
+            # 🔍 FIND PAYMENT
+            # ============================================
+            payment = self.payment_repo.get_by_payment_intent(payment_intent_id)
+
+            if not payment:
+                raise ValueError("Payment not found")
+
+            # ============================================
+            # 🔒 IDEMPOTENCY CHECK
+            # ============================================
+            if payment.status == PaymentStatus.PAID:
+                log_event(
+                    "payment_already_processed",
+                    payment_id=payment.id
+                )
+                return
+
+            # ============================================
+            # VALIDATE METADATA
+            # ============================================
+            metadata = payment_intent.get("metadata", {})
+            order_id_meta = metadata.get("order_id")
+
+            if not order_id_meta:
+                raise ValueError("Missing order_id in metadata")
+
+            # ============================================
+            # UPDATE PAYMENT
+            # ============================================
+            payment.status = PaymentStatus.PAID
+            payment.transaction_id = payment_intent_id
+
+            # ============================================
+            # UPDATE ORDER
+            # ============================================
+            order = payment.order
+
+            order.payment_status = OrderPaymentStatus.PAID
+            order.status = OrderStatus.CONFIRMED
+            order.payment_method = "Stripe"
+
+            # 🔥 CRITICAL FIX (YOUR BUG ROOT)
+            if not order.total_amount or order.total_amount <= 0:
+                order.total_amount = payment.amount
+
+            self.db.commit()
+            self.db.refresh(payment)
+
+            # ============================================
+            # 🔥 CREATE INVOICE (SAFE ZONE)
+            # ============================================
+            try:
+                invoice = self.invoice_service.create_invoice(order.id)
+
+                log_event(
+                    "invoice_generated_success",
+                    order_id=order.id,
+                    invoice_number=invoice.invoice_number
+                )
+
+            except Exception as invoice_error:
+
+                log_event(
+                    "invoice_generation_failed",
+                    level="error",
+                    order_id=order.id,
+                    error=str(invoice_error)
+                )
+
+            # ============================================
+            # SUCCESS LOG
+            # ============================================
             log_event(
-                "invoice_generated_success",
+                "payment_success_processed",
                 order_id=order.id,
-                pdf_path=pdf_path
+                payment_id=payment.id
             )
 
         except Exception as e:
+
+            self.db.rollback()
+
             log_event(
-                "invoice_generation_failed",
-                level="warning",
-                order_id=order.id,
+                "payment_success_failed",
+                level="critical",
                 error=str(e)
             )
+
+            raise
 
     
     # ======================================================

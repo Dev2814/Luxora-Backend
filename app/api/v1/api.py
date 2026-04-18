@@ -69,6 +69,11 @@ from app.api.v1.reviews.routes import router as reviews_router
 from app.api.v1.coupons.routes import router as coupons_router
 from app.api.v1.notifications.routes import router as notifications_router
 
+# -------------------------------
+# INVOICE
+# -------------------------------
+from app.api.v1.invoice.routes import router as invoice_router
+
 
 # =========================================================
 # API ROUTER INITIALIZATION
@@ -128,3 +133,8 @@ api_router.include_router(wishlist_router)
 api_router.include_router(reviews_router)
 api_router.include_router(coupons_router)
 api_router.include_router(notifications_router)
+
+# -------------------------------
+# INVOICE
+# -------------------------------
+api_router.include_router(invoice_router)
