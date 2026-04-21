@@ -1,16 +1,93 @@
 {% extends "base.html" %}
 
+{# Responsive overrides for welcome email (mobile only) #}
+{% block extra_head %}
+<style>
+  @media screen and (max-width: 600px) {
+    /* Eyebrow */
+    .eyebrow-line {
+      width: 12px !important;
+    }
+    .eyebrow-text {
+      font-size: 8px !important;
+      letter-spacing: 3px !important;
+      white-space: normal !important;
+    }
+
+    /* Headline */
+    .headline-main {
+      font-size: 28px !important;
+      line-height: 1.2 !important;
+    }
+
+    /* Welcome card */
+    .welcome-card-inner {
+      padding: 20px 24px !important;
+    }
+    .welcome-card-label {
+      font-size: 8px !important;
+      letter-spacing: 3px !important;
+    }
+    .welcome-card-email {
+      font-size: 16px !important;
+      letter-spacing: 0.5px !important;
+      word-break: break-word !important;
+    }
+
+    /* Steps */
+    .step-cell {
+      width: 26px !important;
+      padding-right: 10px !important;
+    }
+    .step-circle {
+      width: 24px !important;
+      height: 24px !important;
+      line-height: 24px !important;
+      font-size: 9px !important;
+    }
+    .step-title {
+      font-size: 12px !important;
+    }
+    .step-desc {
+      font-size: 11px !important;
+    }
+
+    /* CTA button */
+    .cta-button {
+      padding: 12px 24px !important;
+      font-size: 10px !important;
+      letter-spacing: 2px !important;
+    }
+
+    /* Help box */
+    .help-box {
+      padding: 16px 18px !important;
+    }
+    .help-icon-cell {
+      width: 28px !important;
+      padding-right: 10px !important;
+      font-size: 16px !important;
+    }
+
+    /* General spacing */
+    .section-spacer {
+      margin-bottom: 22px !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- EYEBROW -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;" class="section-spacer">
   <tr>
     <td>
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
-          <td style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">WELCOME TO LUXORA</td>
-          <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
+          <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
+          <td class="eyebrow-text" style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">WELCOME TO LUXORA</td>
+          <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
         </tr>
       </table>
     </td>
@@ -21,7 +98,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
   <tr>
     <td>
-      <div style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
+      <div class="headline-main" style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
         You're in.<br><span style="color:#C9A36F;">Welcome.</span>
       </div>
     </td>
@@ -29,7 +106,7 @@
 </table>
 
 <!-- SUBTITLE -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;" class="section-spacer">
   <tr>
     <td>
       <p style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
@@ -41,14 +118,14 @@
 </table>
 
 <!-- WELCOME CARD -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
   <tr>
     <td style="background-color:#C9A36F;padding-top:3px;border-radius:4px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="background-color:#0D1B2A;padding:28px 32px;border-radius:0 0 3px 3px;text-align:center;">
-            <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0 0 10px 0;">ACCOUNT REGISTERED FOR</p>
-            <p style="font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:400;color:#F5F1EB;letter-spacing:1px;margin:0;">{{ email }}</p>
+          <td class="welcome-card-inner" style="background-color:#0D1B2A;padding:28px 32px;border-radius:0 0 3px 3px;text-align:center;">
+            <p class="welcome-card-label" style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0 0 10px 0;">ACCOUNT REGISTERED FOR</p>
+            <p class="welcome-card-email" style="font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:400;color:#F5F1EB;letter-spacing:1px;margin:0;">{{ email }}</p>
           </td>
         </tr>
       </table>
@@ -75,16 +152,16 @@
 <!-- FEATURE 1 - Explore -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
   <tr>
-    <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+    <td class="step-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">01</td>
+          <td class="step-circle" style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">01</td>
         </tr>
       </table>
     </td>
     <td style="vertical-align:top;">
-      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Explore the Marketplace</p>
-      <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Browse thousands of premium products from verified vendors across all categories.</p>
+      <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Explore the Marketplace</p>
+      <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Browse thousands of premium products from verified vendors across all categories.</p>
     </td>
   </tr>
 </table>
@@ -92,33 +169,33 @@
 <!-- FEATURE 2 - Sell -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
   <tr>
-    <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+    <td class="step-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">02</td>
+          <td class="step-circle" style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">02</td>
         </tr>
       </table>
     </td>
     <td style="vertical-align:top;">
-      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Become a Vendor</p>
-      <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Ready to sell? Apply for a vendor account and reach thousands of buyers on Luxora.</p>
+      <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Become a Vendor</p>
+      <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Ready to sell? Apply for a vendor account and reach thousands of buyers on Luxora.</p>
     </td>
   </tr>
 </table>
 
 <!-- FEATURE 3 - Profile -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;" class="section-spacer">
   <tr>
-    <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+    <td class="step-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">03</td>
+          <td class="step-circle" style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">03</td>
         </tr>
       </table>
     </td>
     <td style="vertical-align:top;">
-      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Complete Your Profile</p>
-      <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Add your details, set your preferences, and personalise your Luxora experience.</p>
+      <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Complete Your Profile</p>
+      <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Add your details, set your preferences, and personalise your Luxora experience.</p>
     </td>
   </tr>
 </table>
@@ -130,7 +207,7 @@
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td style="background-color:#0D1B2A;border-radius:2px;border-bottom:2px solid #C9A36F;">
-            <a href="#" style="display:inline-block;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#F5F1EB;text-decoration:none;padding:14px 32px;">START EXPLORING</a>
+            <a href="#" class="cta-button" style="display:inline-block;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#F5F1EB;text-decoration:none;padding:14px 32px;">START EXPLORING</a>
           </td>
         </tr>
       </table>
@@ -157,10 +234,10 @@
 <!-- NEED HELP -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr>
-    <td style="background-color:#F8F6F2;border-radius:4px;padding:20px 22px;">
+    <td class="help-box" style="background-color:#F8F6F2;border-radius:4px;padding:20px 22px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;font-size:18px;line-height:1;">&#128218;</td>
+          <td class="help-icon-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;font-size:18px;line-height:1;">&#128218;</td>
           <td style="vertical-align:top;">
             <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 5px 0;">Need help getting started?</p>
             <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.6;margin:0;">

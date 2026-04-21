@@ -1,16 +1,106 @@
 {% extends "base.html" %}
 
+{# Responsive overrides for vendor rejection (mobile only) #}
+{% block extra_head %}
+<style>
+  @media screen and (max-width: 600px) {
+    /* Eyebrow */
+    .eyebrow-line {
+      width: 12px !important;
+    }
+    .eyebrow-text {
+      font-size: 8px !important;
+      letter-spacing: 3px !important;
+      white-space: normal !important;
+    }
+
+    /* Headline */
+    .headline-main {
+      font-size: 28px !important;
+      line-height: 1.2 !important;
+    }
+
+    /* Status badge */
+    .status-badge {
+      padding: 6px 12px !important;
+    }
+    .status-badge-text {
+      white-space: normal !important;
+      font-size: 10px !important;
+      letter-spacing: 1.5px !important;
+    }
+
+    /* Brand card */
+    .brand-card {
+      padding: 14px 16px !important;
+    }
+    .brand-label {
+      font-size: 8px !important;
+      letter-spacing: 2px !important;
+    }
+    .brand-name {
+      font-size: 18px !important;
+    }
+
+    /* Reason box */
+    .reason-box {
+      padding: 16px 18px !important;
+    }
+    .reason-label {
+      font-size: 8px !important;
+      letter-spacing: 2px !important;
+    }
+    .reason-text {
+      font-size: 12px !important;
+    }
+
+    /* Steps */
+    .step-cell {
+      width: 28px !important;
+      padding-right: 10px !important;
+    }
+    .step-icon {
+      width: 24px !important;
+      height: 24px !important;
+      line-height: 24px !important;
+      font-size: 12px !important;
+    }
+    .step-title {
+      font-size: 12px !important;
+    }
+    .step-desc {
+      font-size: 11px !important;
+    }
+
+    /* Support box */
+    .support-box {
+      padding: 16px 18px !important;
+    }
+    .support-icon-cell {
+      width: 28px !important;
+      padding-right: 10px !important;
+      font-size: 18px !important;
+    }
+
+    /* General spacing */
+    .section-spacer {
+      margin-bottom: 22px !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- EYEBROW -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;" class="section-spacer">
   <tr>
     <td>
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:20px;height:1px;background-color:#9B8E7E;font-size:1px;line-height:1px;">&nbsp;</td>
-          <td style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#9B8E7E;text-transform:uppercase;white-space:nowrap;">VENDOR VERIFICATION</td>
-          <td style="width:20px;height:1px;background-color:#9B8E7E;font-size:1px;line-height:1px;">&nbsp;</td>
+          <td class="eyebrow-line" style="width:20px;height:1px;background-color:#9B8E7E;font-size:1px;line-height:1px;">&nbsp;</td>
+          <td class="eyebrow-text" style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#9B8E7E;text-transform:uppercase;white-space:nowrap;">VENDOR VERIFICATION</td>
+          <td class="eyebrow-line" style="width:20px;height:1px;background-color:#9B8E7E;font-size:1px;line-height:1px;">&nbsp;</td>
         </tr>
       </table>
     </td>
@@ -21,7 +111,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
   <tr>
     <td>
-      <div style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
+      <div class="headline-main" style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
         Application<br>Unsuccessful.
       </div>
     </td>
@@ -29,7 +119,7 @@
 </table>
 
 <!-- SUBTITLE -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
   <tr>
     <td>
       <p style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
@@ -41,13 +131,13 @@
 </table>
 
 <!-- STATUS BADGE -->
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
   <tr>
-    <td style="background-color:#FEF2F2;border:1px solid #FECACA;border-radius:100px;padding:7px 16px;">
+    <td class="status-badge" style="background-color:#FEF2F2;border:1px solid #FECACA;border-radius:100px;padding:7px 16px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td style="width:7px;height:7px;background-color:#DC2626;border-radius:50%;vertical-align:middle;"></td>
-          <td style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#B91C1C;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">APPLICATION NOT APPROVED</td>
+          <td class="status-badge-text" style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#B91C1C;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">APPLICATION NOT APPROVED</td>
         </tr>
       </table>
     </td>
@@ -57,19 +147,19 @@
 <!-- BRAND CARD -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
   <tr>
-    <td style="border-left:3px solid #D4BBAA;background-color:#F8F6F2;border-radius:0 4px 4px 0;padding:16px 20px;">
-      <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:#9B8E7E;text-transform:uppercase;margin:0 0 5px 0;">APPLICATION FOR</p>
-      <p style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#0D1B2A;margin:0;">{{ business_name }}</p>
+    <td class="brand-card" style="border-left:3px solid #D4BBAA;background-color:#F8F6F2;border-radius:0 4px 4px 0;padding:16px 20px;">
+      <p class="brand-label" style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:#9B8E7E;text-transform:uppercase;margin:0 0 5px 0;">APPLICATION FOR</p>
+      <p class="brand-name" style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#0D1B2A;margin:0;">{{ business_name }}</p>
     </td>
   </tr>
 </table>
 
 <!-- REASON BOX -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
   <tr>
-    <td style="background-color:#FFFBF8;border:1px solid #EDE8E0;border-radius:4px;padding:22px 24px;">
-      <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:#B45309;text-transform:uppercase;margin:0 0 10px 0;">REASON FOR REJECTION</p>
-      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:300;color:#374151;line-height:1.7;margin:0;">{{ reason }}</p>
+    <td class="reason-box" style="background-color:#FFFBF8;border:1px solid #EDE8E0;border-radius:4px;padding:22px 24px;">
+      <p class="reason-label" style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:#B45309;text-transform:uppercase;margin:0 0 10px 0;">REASON FOR REJECTION</p>
+      <p class="reason-text" style="font-family:Arial,sans-serif;font-size:13px;font-weight:300;color:#374151;line-height:1.7;margin:0;">{{ reason }}</p>
     </td>
   </tr>
 </table>
@@ -93,33 +183,33 @@
 <!-- STEP 1 - Review -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
   <tr>
-    <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+    <td class="step-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:28px;height:28px;background-color:#F3EEE8;border:1px solid #DDD5C8;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:14px;color:#7B6D5E;line-height:28px;">&#10022;</td>
+          <td class="step-icon" style="width:28px;height:28px;background-color:#F3EEE8;border:1px solid #DDD5C8;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:14px;color:#7B6D5E;line-height:28px;">&#10022;</td>
         </tr>
       </table>
     </td>
     <td style="vertical-align:top;">
-      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Review the Feedback</p>
-      <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Carefully read the reason stated above and identify what needs to be corrected or updated.</p>
+      <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Review the Feedback</p>
+      <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Carefully read the reason stated above and identify what needs to be corrected or updated.</p>
     </td>
   </tr>
 </table>
 
 <!-- STEP 2 - Reapply -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
   <tr>
-    <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+    <td class="step-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:28px;height:28px;background-color:#F3EEE8;border:1px solid #DDD5C8;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:16px;color:#7B6D5E;line-height:28px;">&#8635;</td>
+          <td class="step-icon" style="width:28px;height:28px;background-color:#F3EEE8;border:1px solid #DDD5C8;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:16px;color:#7B6D5E;line-height:28px;">&#8635;</td>
         </tr>
       </table>
     </td>
     <td style="vertical-align:top;">
-      <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Reapply After Corrections</p>
-      <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Once you've addressed the issue, you're welcome to submit a new vendor application through our portal.</p>
+      <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Reapply After Corrections</p>
+      <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Once you've addressed the issue, you're welcome to submit a new vendor application through our portal.</p>
     </td>
   </tr>
 </table>
@@ -127,10 +217,10 @@
 <!-- SUPPORT BOX -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr>
-    <td style="background-color:#F8F6F2;border-radius:4px;padding:20px 22px;">
+    <td class="support-box" style="background-color:#F8F6F2;border-radius:4px;padding:20px 22px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;font-size:20px;line-height:1;">&#128172;</td>
+          <td class="support-icon-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;font-size:20px;line-height:1;">&#128172;</td>
           <td style="vertical-align:top;">
             <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 5px 0;">Think this is a mistake?</p>
             <p style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.6;margin:0;">

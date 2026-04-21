@@ -1,16 +1,92 @@
 {% extends "base.html" %}
 
+{# Responsive overrides for OTP verification (mobile only) #}
+{% block extra_head %}
+<style>
+  @media screen and (max-width: 600px) {
+    /* Eyebrow */
+    .eyebrow-line {
+      width: 12px !important;
+    }
+    .eyebrow-text {
+      font-size: 8px !important;
+      letter-spacing: 3px !important;
+      white-space: normal !important;
+    }
+
+    /* Headline */
+    .headline-main {
+      font-size: 28px !important;
+      line-height: 1.2 !important;
+    }
+
+    /* OTP card */
+    .otp-inner {
+      padding: 20px 16px 18px 16px !important;
+    }
+    .otp-digit-cell {
+      width: 36px !important;
+      height: 44px !important;
+      font-size: 22px !important;
+    }
+    .otp-dash {
+      font-size: 18px !important;
+      padding: 0 4px !important;
+    }
+
+    /* Timer badge */
+    .timer-badge {
+      padding: 6px 12px !important;
+    }
+    .timer-badge-text {
+      white-space: normal !important;
+      font-size: 10px !important;
+      letter-spacing: 1.5px !important;
+    }
+
+    /* Security notice */
+    .security-notice {
+      padding: 16px 18px !important;
+    }
+    .lock-icon-cell {
+      width: 28px !important;
+      padding-right: 10px !important;
+    }
+    .lock-icon {
+      width: 26px !important;
+      height: 26px !important;
+      line-height: 26px !important;
+      font-size: 12px !important;
+    }
+
+    /* Meta row (3 columns) */
+    .meta-label {
+      font-size: 7px !important;
+      letter-spacing: 2px !important;
+    }
+    .meta-value {
+      font-size: 10px !important;
+    }
+
+    /* General spacing */
+    .section-spacer {
+      margin-bottom: 22px !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- EYEBROW -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;" class="section-spacer">
   <tr>
     <td>
       <table role="presentation" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="width:20px;height:1px;background-color:#C9A36F;opacity:0.5;vertical-align:middle;"></td>
-          <td style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">SECURITY VERIFICATION</td>
-          <td style="width:20px;height:1px;background-color:#C9A36F;opacity:0.5;vertical-align:middle;"></td>
+          <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;opacity:0.5;vertical-align:middle;"></td>
+          <td class="eyebrow-text" style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">SECURITY VERIFICATION</td>
+          <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;opacity:0.5;vertical-align:middle;"></td>
         </tr>
       </table>
     </td>
@@ -21,13 +97,13 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
   <tr>
     <td>
-      <div style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">Login<br>Verification.</div>
+      <div class="headline-main" style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">Login<br>Verification.</div>
     </td>
   </tr>
 </table>
 
 <!-- SUBTITLE -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;" class="section-spacer">
   <tr>
     <td>
       <p style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
@@ -38,13 +114,13 @@
 </table>
 
 <!-- OTP BLOCK -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
   <tr>
     <!-- Gold top border trick: outer td + inner table -->
     <td style="background-color:#C9A36F;padding-top:3px;border-radius:4px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="background-color:#F8F6F2;padding:28px 24px 26px 24px;text-align:center;border-radius:0 0 3px 3px;">
+          <td class="otp-inner" style="background-color:#F8F6F2;padding:28px 24px 26px 24px;text-align:center;border-radius:0 0 3px 3px;">
 
             <!-- Label -->
             <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#9B8E7E;text-transform:uppercase;margin:0 0 20px 0;">YOUR ONE-TIME PASSWORD</p>
@@ -55,12 +131,12 @@
                 {% set digits = otp | string %}
                 {% for i in range(digits | length) %}
                   {% if i == 3 and digits | length == 6 %}
-                    <td style="padding:0 6px;font-family:Arial,sans-serif;font-size:20px;color:#D4BBAA;vertical-align:middle;">–</td>
+                    <td class="otp-dash" style="padding:0 6px;font-family:Arial,sans-serif;font-size:20px;color:#D4BBAA;vertical-align:middle;">–</td>
                   {% endif %}
                   <td style="padding:0 4px;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="width:42px;height:50px;background-color:#ffffff;border:1px solid #DDD5C8;border-bottom:2px solid #C9A36F;border-radius:3px;text-align:center;vertical-align:middle;font-family:'Courier New',Courier,monospace;font-size:26px;font-weight:700;color:#0D1B2A;">
+                        <td class="otp-digit-cell" style="width:42px;height:50px;background-color:#ffffff;border:1px solid #DDD5C8;border-bottom:2px solid #C9A36F;border-radius:3px;text-align:center;vertical-align:middle;font-family:'Courier New',Courier,monospace;font-size:26px;font-weight:700;color:#0D1B2A;">
                           {{ digits[i] }}
                         </td>
                       </tr>
@@ -73,11 +149,11 @@
             <!-- Timer badge -->
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:22px auto 0 auto;">
               <tr>
-                <td style="background-color:#FEF9F0;border:1px solid #F5DFB0;border-radius:100px;padding:7px 16px;">
+                <td class="timer-badge" style="background-color:#FEF9F0;border:1px solid #F5DFB0;border-radius:100px;padding:7px 16px;">
                   <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                     <tr>
                       <td style="width:7px;height:7px;background-color:#D97706;border-radius:50%;vertical-align:middle;"></td>
-                      <td style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#92400E;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">EXPIRES IN 5 MINUTES</td>
+                      <td class="timer-badge-text" style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#92400E;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">EXPIRES IN 5 MINUTES</td>
                     </tr>
                   </table>
                 </td>
@@ -99,16 +175,16 @@
 </table>
 
 <!-- SECURITY NOTICE -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
   <tr>
-    <td style="background-color:#F8F6F2;border-radius:4px;padding:20px 22px;">
+    <td class="security-notice" style="background-color:#F8F6F2;border-radius:4px;padding:20px 22px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <!-- Lock icon circle -->
-          <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+          <td class="lock-icon-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <td style="width:30px;height:30px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-size:14px;line-height:30px;">
+                <td class="lock-icon" style="width:30px;height:30px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-size:14px;line-height:30px;">
                   &#128274;
                 </td>
               </tr>
@@ -134,22 +210,22 @@
   <tr>
     <!-- Single Use -->
     <td width="33%" style="text-align:center;padding:0 8px;">
-      <p style="font-family:Arial,sans-serif;font-size:8px;font-weight:700;letter-spacing:3px;color:#B0A89E;text-transform:uppercase;margin:0 0 4px 0;">SINGLE USE</p>
-      <p style="font-family:Arial,sans-serif;font-size:12px;color:#4B5563;margin:0;">1 time only</p>
+      <p class="meta-label" style="font-family:Arial,sans-serif;font-size:8px;font-weight:700;letter-spacing:3px;color:#B0A89E;text-transform:uppercase;margin:0 0 4px 0;">SINGLE USE</p>
+      <p class="meta-value" style="font-family:Arial,sans-serif;font-size:12px;color:#4B5563;margin:0;">1 time only</p>
     </td>
     <!-- Divider -->
     <td width="1" style="width:1px;background-color:#EDE8E0;">&nbsp;</td>
     <!-- Validity -->
     <td width="33%" style="text-align:center;padding:0 8px;">
-      <p style="font-family:Arial,sans-serif;font-size:8px;font-weight:700;letter-spacing:3px;color:#B0A89E;text-transform:uppercase;margin:0 0 4px 0;">VALIDITY</p>
-      <p style="font-family:Arial,sans-serif;font-size:12px;color:#4B5563;margin:0;">5 minutes</p>
+      <p class="meta-label" style="font-family:Arial,sans-serif;font-size:8px;font-weight:700;letter-spacing:3px;color:#B0A89E;text-transform:uppercase;margin:0 0 4px 0;">VALIDITY</p>
+      <p class="meta-value" style="font-family:Arial,sans-serif;font-size:12px;color:#4B5563;margin:0;">5 minutes</p>
     </td>
     <!-- Divider -->
     <td width="1" style="width:1px;background-color:#EDE8E0;">&nbsp;</td>
     <!-- Do not share -->
     <td width="33%" style="text-align:center;padding:0 8px;">
-      <p style="font-family:Arial,sans-serif;font-size:8px;font-weight:700;letter-spacing:3px;color:#B0A89E;text-transform:uppercase;margin:0 0 4px 0;">DO NOT SHARE</p>
-      <p style="font-family:Arial,sans-serif;font-size:12px;color:#4B5563;margin:0;">With anyone</p>
+      <p class="meta-label" style="font-family:Arial,sans-serif;font-size:8px;font-weight:700;letter-spacing:3px;color:#B0A89E;text-transform:uppercase;margin:0 0 4px 0;">DO NOT SHARE</p>
+      <p class="meta-value" style="font-family:Arial,sans-serif;font-size:12px;color:#4B5563;margin:0;">With anyone</p>
     </td>
   </tr>
 </table>

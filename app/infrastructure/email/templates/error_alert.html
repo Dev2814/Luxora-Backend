@@ -1,20 +1,84 @@
 {% extends "base.html" %}
 
+{# Responsive overrides for this specific error template (only on mobile) #}
+{% block extra_head %}
+<style>
+  @media screen and (max-width: 600px) {
+    /* Eyebrow: shrink side lines and allow text to scale */
+    .eyebrow-line {
+      width: 12px !important;
+    }
+    .eyebrow-text {
+      font-size: 8px !important;
+      letter-spacing: 3px !important;
+      white-space: normal !important;   /* allow wrap if needed */
+    }
+
+    /* Headline: reduce size for small screens */
+    .headline-main {
+      font-size: 28px !important;
+      line-height: 1.2 !important;
+    }
+
+    /* Status badge: remove forced nowrap and reduce padding */
+    .status-badge {
+      padding: 6px 12px !important;
+    }
+    .status-badge-text {
+      white-space: normal !important;
+      font-size: 10px !important;
+      letter-spacing: 1.5px !important;
+    }
+
+    /* Error card: adjust padding */
+    .error-card {
+      padding: 14px 16px !important;
+    }
+
+    /* Step layout: keep side‑by‑side but reduce left column width */
+    .step-number-cell {
+      width: 26px !important;
+      padding-right: 10px !important;
+    }
+    .step-circle {
+      width: 24px !important;
+      height: 24px !important;
+      line-height: 24px !important;
+      font-size: 9px !important;
+    }
+    .step-title {
+      font-size: 12px !important;
+    }
+    .step-desc {
+      font-size: 11px !important;
+    }
+
+    /* CTA button: make it full‑width friendly */
+    .cta-button {
+      padding: 12px 24px !important;
+      font-size: 10px !important;
+      letter-spacing: 2px !important;
+    }
+
+    /* General spacing tweaks */
+    .section-spacer {
+      margin-bottom: 22px !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- EYEBROW -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;" class="section-spacer">
     <tr>
         <td>
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;
-                    </td>
-                    <td
-                        style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">
-                        SYSTEM ALERT</td>
-                    <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;
-                    </td>
+                    <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
+                    <td class="eyebrow-text" style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">SYSTEM ALERT</td>
+                    <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
                 </tr>
             </table>
         </td>
@@ -25,8 +89,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
     <tr>
         <td>
-            <div
-                style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
+            <div class="headline-main" style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
                 Backend<br><span style="color:#B00020;">Error Detected.</span>
             </div>
         </td>
@@ -34,11 +97,10 @@
 </table>
 
 <!-- SUBTITLE -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
     <tr>
         <td>
-            <p
-                style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
+            <p style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
                 An error has occurred in the Luxora backend system. Immediate investigation is required.
             </p>
         </td>
@@ -46,16 +108,13 @@
 </table>
 
 <!-- STATUS BADGE -->
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
     <tr>
-        <td style="background-color:#FEF2F2;border:1px solid #FECACA;border-radius:100px;padding:7px 16px;">
+        <td class="status-badge" style="background-color:#FEF2F2;border:1px solid #FECACA;border-radius:100px;padding:7px 16px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td style="width:7px;height:7px;background-color:#DC2626;border-radius:50%;vertical-align:middle;">
-                    </td>
-                    <td
-                        style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#B91C1C;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">
-                        REQUIRES IMMEDIATE ATTENTION</td>
+                    <td style="width:7px;height:7px;background-color:#DC2626;border-radius:50%;vertical-align:middle;"></td>
+                    <td class="status-badge-text" style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#B91C1C;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">REQUIRES IMMEDIATE ATTENTION</td>
                 </tr>
             </table>
         </td>
@@ -73,23 +132,17 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
     <tr>
         <td>
-            <p
-                style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">
-                ERROR DETAILS</p>
+            <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">ERROR DETAILS</p>
         </td>
     </tr>
 </table>
 
 <!-- ERROR MESSAGE CARD -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
     <tr>
-        <td style="border-left:3px solid #DC2626;background-color:#FEF2F2;border-radius:0 4px 4px 0;padding:16px 20px;">
-            <p
-                style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:#B91C1C;text-transform:uppercase;margin:0 0 8px 0;">
-                ERROR MESSAGE</p>
-            <p
-                style="font-family:Georgia,'Times New Roman',serif;font-size:15px;color:#7F1D1D;line-height:1.6;margin:0;">
-                {{ message }}</p>
+        <td class="error-card" style="border-left:3px solid #DC2626;background-color:#FEF2F2;border-radius:0 4px 4px 0;padding:16px 20px;">
+            <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:#B91C1C;text-transform:uppercase;margin:0 0 8px 0;">ERROR MESSAGE</p>
+            <p style="font-family:Georgia,'Times New Roman',serif;font-size:15px;color:#7F1D1D;line-height:1.6;margin:0;">{{ message }}</p>
         </td>
     </tr>
 </table>
@@ -105,9 +158,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
     <tr>
         <td>
-            <p
-                style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">
-                RECOMMENDED ACTIONS</p>
+            <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">RECOMMENDED ACTIONS</p>
         </td>
     </tr>
 </table>
@@ -115,21 +166,16 @@
 <!-- STEP 01 -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
     <tr>
-        <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+        <td class="step-number-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td
-                        style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">
-                        01</td>
+                    <td class="step-circle" style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">01</td>
                 </tr>
             </table>
         </td>
         <td style="vertical-align:top;">
-            <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Check
-                System Logs</p>
-            <p
-                style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">
-                Review the backend logs to identify the root cause of the issue.</p>
+            <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Check System Logs</p>
+            <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Review the backend logs to identify the root cause of the issue.</p>
         </td>
     </tr>
 </table>
@@ -137,43 +183,33 @@
 <!-- STEP 02 -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
     <tr>
-        <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+        <td class="step-number-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td
-                        style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">
-                        02</td>
+                    <td class="step-circle" style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">02</td>
                 </tr>
             </table>
         </td>
         <td style="vertical-align:top;">
-            <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">
-                Escalate If Needed</p>
-            <p
-                style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">
-                Notify the on-call engineering team if the issue cannot be resolved promptly.</p>
+            <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Escalate If Needed</p>
+            <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Notify the on-call engineering team if the issue cannot be resolved promptly.</p>
         </td>
     </tr>
 </table>
 
 <!-- STEP 03 -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;" class="section-spacer">
     <tr>
-        <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+        <td class="step-number-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td
-                        style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">
-                        03</td>
+                    <td class="step-circle" style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">03</td>
                 </tr>
             </table>
         </td>
         <td style="vertical-align:top;">
-            <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">
-                Document the Incident</p>
-            <p
-                style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">
-                Record findings and actions taken in the incident log for future reference.</p>
+            <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Document the Incident</p>
+            <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Record findings and actions taken in the incident log for future reference.</p>
         </td>
     </tr>
 </table>
@@ -185,9 +221,7 @@
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td style="background-color:#0D1B2A;border-radius:2px;border-bottom:2px solid #C9A36F;">
-                        <a href="#"
-                            style="display:inline-block;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#F5F1EB;text-decoration:none;padding:14px 32px;">GO
-                            TO ADMIN DASHBOARD</a>
+                        <a href="#" class="cta-button" style="display:inline-block;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#F5F1EB;text-decoration:none;padding:14px 32px;">GO TO ADMIN DASHBOARD</a>
                     </td>
                 </tr>
             </table>
@@ -199,8 +233,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td align="center">
-            <p style="font-family:Arial,sans-serif;font-size:11px;color:#9CA3AF;margin:0;">This is an automated alert
-                from the Luxora system monitoring service.</p>
+            <p style="font-family:Arial,sans-serif;font-size:11px;color:#9CA3AF;margin:0;">This is an automated alert from the Luxora system monitoring service.</p>
         </td>
     </tr>
 </table>

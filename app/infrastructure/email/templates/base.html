@@ -5,28 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>{{ title if title else "Luxora" }}</title>
-  <!--[if mso]>
-  <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
-  <![endif]-->
+  <style>
+    /* ---------- RESPONSIVE MEDIA QUERIES (no design changes) ---------- */
+    @media screen and (max-width: 600px) {
+      .outer-wrapper {
+        padding: 24px 10px !important;
+      }
+      .email-container {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .pad-header {
+        padding: 30px 24px 24px 24px !important;
+      }
+      .pad-content {
+        padding: 36px 24px 30px 24px !important;
+      }
+      .pad-footer {
+        padding: 24px 24px 30px 24px !important;
+      }
+      /* Allow footer links to wrap naturally without forced inline-block */
+      .footer-links {
+        display: inline !important;       /* let them flow like normal text */
+        margin: 0 6px !important;         /* slightly tighter spacing */
+      }
+      .footer-sep {
+        display: inline !important;
+      }
+    }
+
+    /* Extra refinement for very narrow screens (e.g., Galaxy Fold) */
+    @media screen and (max-width: 400px) {
+      .pad-header {
+        padding: 24px 18px 20px 18px !important;
+      }
+      .pad-content {
+        padding: 28px 18px 24px 18px !important;
+      }
+      .pad-footer {
+        padding: 20px 18px 24px 18px !important;
+      }
+      .footer-links {
+        font-size: 10px !important;
+        margin: 0 4px !important;
+      }
+      /* Ensure the logo scales down gracefully */
+      .logo-main {
+        font-size: 24px !important;
+        letter-spacing: 6px !important;
+      }
+      .logo-sub {
+        font-size: 8px !important;
+        letter-spacing: 4px !important;
+      }
+    }
+
+    /* Prevent images (if any) from breaking the layout */
+    img {
+      max-width: 100% !important;
+      height: auto !important;
+      border: 0;
+    }
+  </style>
 </head>
 <body style="margin:0;padding:0;background-color:#EDEAE4;font-family:Arial,sans-serif;-webkit-font-smoothing:antialiased;">
 
-  <!-- OUTER WRAPPER -->
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EDEAE4;">
     <tr>
-      <td align="center" style="padding:48px 16px;">
+      <td align="center" class="outer-wrapper" style="padding:48px 16px;">
 
-        <!-- EMAIL CONTAINER -->
-        <table role="presentation" width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;background-color:#ffffff;border-radius:3px;overflow:hidden;">
+        <table role="presentation" class="email-container" width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;background-color:#ffffff;border-radius:3px;overflow:hidden;">
 
-          <!-- HEADER -->
           <tr>
-            <td style="background-color:#0D1B2A;padding:36px 48px 32px 48px;">
+            <td class="pad-header" style="background-color:#0D1B2A;padding:36px 48px 32px 48px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td>
-                    <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:700;letter-spacing:8px;color:#F5F1EB;text-transform:uppercase;line-height:1;">LUXORA</div>
-                    <div style="font-family:Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:5px;color:#C9A36F;text-transform:uppercase;margin-top:6px;">PREMIUM MARKETPLACE</div>
+                    <div class="logo-main" style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:700;letter-spacing:8px;color:#F5F1EB;text-transform:uppercase;line-height:1;">LUXORA</div>
+                    <div class="logo-sub" style="font-family:Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:5px;color:#C9A36F;text-transform:uppercase;margin-top:6px;">PREMIUM MARKETPLACE</div>
                     <div style="width:28px;height:1px;background-color:#C9A36F;margin-top:20px;opacity:0.7;"></div>
                   </td>
                 </tr>
@@ -34,24 +90,22 @@
             </td>
           </tr>
 
-          <!-- CONTENT BLOCK -->
           <tr>
-            <td style="padding:48px 48px 40px 48px;">
+            <td class="pad-content" style="padding:48px 48px 40px 48px;">
               {% block content %}{% endblock %}
             </td>
           </tr>
 
-          <!-- FOOTER -->
           <tr>
-            <td style="background-color:#F7F4F0;border-top:1px solid #E8E3DB;padding:26px 48px 30px 48px;text-align:center;">
+            <td class="pad-footer" style="background-color:#F7F4F0;border-top:1px solid #E8E3DB;padding:26px 48px 30px 48px;text-align:center;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td align="center" style="padding-bottom:12px;">
-                    <a href="#" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Help &amp; Support</a>
-                    <span style="color:#C9A36F;font-size:10px;">&nbsp;&middot;&nbsp;</span>
-                    <a href="#" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Privacy Policy</a>
-                    <span style="color:#C9A36F;font-size:10px;">&nbsp;&middot;&nbsp;</span>
-                    <a href="#" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Terms of Service</a>
+                    <a href="#" class="footer-links" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Help &amp; Support</a>
+                    <span class="footer-sep" style="color:#C9A36F;font-size:10px;">&nbsp;&middot;&nbsp;</span>
+                    <a href="#" class="footer-links" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Privacy Policy</a>
+                    <span class="footer-sep" style="color:#C9A36F;font-size:10px;">&nbsp;&middot;&nbsp;</span>
+                    <a href="#" class="footer-links" style="font-family:Arial,sans-serif;font-size:11px;color:#908880;text-decoration:none;margin:0 8px;">Terms of Service</a>
                   </td>
                 </tr>
                 <tr>
@@ -69,9 +123,7 @@
           </tr>
 
         </table>
-        <!-- END EMAIL CONTAINER -->
-
-      </td>
+        </td>
     </tr>
   </table>
 

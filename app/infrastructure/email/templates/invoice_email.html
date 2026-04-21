@@ -1,20 +1,79 @@
 {% extends "base.html" %}
 
+{# Responsive overrides for order confirmation (mobile only) #}
+{% block extra_head %}
+<style>
+  @media screen and (max-width: 600px) {
+    /* Eyebrow */
+    .eyebrow-line {
+      width: 12px !important;
+    }
+    .eyebrow-text {
+      font-size: 8px !important;
+      letter-spacing: 3px !important;
+      white-space: normal !important;
+    }
+
+    /* Headline */
+    .headline-main {
+      font-size: 28px !important;
+      line-height: 1.2 !important;
+    }
+
+    /* Status badge */
+    .status-badge {
+      padding: 6px 12px !important;
+    }
+    .status-badge-text {
+      white-space: normal !important;
+      font-size: 10px !important;
+      letter-spacing: 1.5px !important;
+    }
+
+    /* Order details card */
+    .order-card {
+      padding: 12px 16px !important;
+    }
+    .order-row {
+      padding: 10px 16px 0 16px !important;
+    }
+    .order-label {
+      font-size: 10px !important;
+      letter-spacing: 1.5px !important;
+    }
+    .order-value {
+      font-size: 12px !important;
+    }
+    .order-total-value {
+      font-size: 18px !important;
+    }
+
+    /* CTA button */
+    .cta-button {
+      padding: 12px 24px !important;
+      font-size: 10px !important;
+      letter-spacing: 2px !important;
+    }
+
+    /* General spacing */
+    .section-spacer {
+      margin-bottom: 22px !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- EYEBROW -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;" class="section-spacer">
     <tr>
         <td>
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;
-                    </td>
-                    <td
-                        style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">
-                        ORDER CONFIRMATION</td>
-                    <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;
-                    </td>
+                    <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
+                    <td class="eyebrow-text" style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">ORDER CONFIRMATION</td>
+                    <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
                 </tr>
             </table>
         </td>
@@ -25,8 +84,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
     <tr>
         <td>
-            <div
-                style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
+            <div class="headline-main" style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
                 Thank you,<br><span style="color:#C9A36F;">{{ customer_name }}.</span>
             </div>
         </td>
@@ -34,11 +92,10 @@
 </table>
 
 <!-- SUBTITLE -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
     <tr>
         <td>
-            <p
-                style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
+            <p style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
                 Your payment has been successfully received. Your invoice is attached to this email for your records.
             </p>
         </td>
@@ -46,16 +103,13 @@
 </table>
 
 <!-- STATUS BADGE -->
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
     <tr>
-        <td style="background-color:#F0FDF4;border:1px solid #86EFAC;border-radius:100px;padding:7px 16px;">
+        <td class="status-badge" style="background-color:#F0FDF4;border:1px solid #86EFAC;border-radius:100px;padding:7px 16px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td style="width:7px;height:7px;background-color:#16A34A;border-radius:50%;vertical-align:middle;">
-                    </td>
-                    <td
-                        style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#15803D;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">
-                        PAYMENT {{ order.payment_status }}</td>
+                    <td style="width:7px;height:7px;background-color:#16A34A;border-radius:50%;vertical-align:middle;"></td>
+                    <td class="status-badge-text" style="padding-left:8px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#15803D;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">PAYMENT {{ order.payment_status }}</td>
                 </tr>
             </table>
         </td>
@@ -73,28 +127,21 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
     <tr>
         <td>
-            <p
-                style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">
-                ORDER SUMMARY</p>
+            <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">ORDER SUMMARY</p>
         </td>
     </tr>
 </table>
 
 <!-- ORDER DETAILS CARD -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
-    style="margin-bottom:28px;border-left:3px solid #C9A36F;background-color:#F8F6F2;border-radius:0 4px 4px 0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;border-left:3px solid #C9A36F;background-color:#F8F6F2;border-radius:0 4px 4px 0;" class="section-spacer">
 
     <!-- Order ID -->
     <tr>
-        <td style="padding:14px 20px 0 20px;">
+        <td class="order-row" style="padding:14px 20px 0 20px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td
-                        style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;">
-                        Order ID</td>
-                    <td align="right"
-                        style="font-family:Georgia,'Times New Roman',serif;font-size:14px;font-weight:700;color:#0D1B2A;">
-                        {{ order.order_number }}</td>
+                    <td class="order-label" style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;">Order ID</td>
+                    <td align="right" class="order-value" style="font-family:Georgia,'Times New Roman',serif;font-size:14px;font-weight:700;color:#0D1B2A;">{{ order.order_number }}</td>
                 </tr>
             </table>
         </td>
@@ -113,14 +160,11 @@
 
     <!-- Order Date -->
     <tr>
-        <td style="padding:10px 20px 0 20px;">
+        <td class="order-row" style="padding:10px 20px 0 20px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td
-                        style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;">
-                        Order Date</td>
-                    <td align="right" style="font-family:Arial,sans-serif;font-size:13px;color:#1F2937;">{{
-                        order.created_at }}</td>
+                    <td class="order-label" style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;">Order Date</td>
+                    <td align="right" class="order-value" style="font-family:Arial,sans-serif;font-size:13px;color:#1F2937;">{{ order.created_at }}</td>
                 </tr>
             </table>
         </td>
@@ -139,15 +183,11 @@
 
     <!-- Total Amount -->
     <tr>
-        <td style="padding:10px 20px 16px 20px;">
+        <td class="order-row" style="padding:10px 20px 16px 20px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td
-                        style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;">
-                        Total Amount</td>
-                    <td align="right"
-                        style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#0D1B2A;">
-                        &#8377; {{ order.total_amount }}</td>
+                    <td class="order-label" style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;">Total Amount</td>
+                    <td align="right" class="order-total-value" style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#0D1B2A;">&#8377; {{ order.total_amount }}</td>
                 </tr>
             </table>
         </td>
@@ -162,9 +202,7 @@
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td style="background-color:#0D1B2A;border-radius:2px;border-bottom:2px solid #C9A36F;">
-                        <a href="#"
-                            style="display:inline-block;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#F5F1EB;text-decoration:none;padding:14px 32px;">VIEW
-                            YOUR ORDER</a>
+                        <a href="#" class="cta-button" style="display:inline-block;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#F5F1EB;text-decoration:none;padding:14px 32px;">VIEW YOUR ORDER</a>
                     </td>
                 </tr>
             </table>
@@ -176,8 +214,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td align="center">
-            <p style="font-family:Arial,sans-serif;font-size:11px;color:#9CA3AF;margin:0;">If you have any questions,
-                our support team is here to help.</p>
+            <p style="font-family:Arial,sans-serif;font-size:11px;color:#9CA3AF;margin:0;">If you have any questions, our support team is here to help.</p>
         </td>
     </tr>
 </table>

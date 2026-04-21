@@ -1,20 +1,78 @@
 {% extends "base.html" %}
 
+{# Responsive overrides for generic OTP template (mobile only) #}
+{% block extra_head %}
+<style>
+  @media screen and (max-width: 600px) {
+    /* Eyebrow */
+    .eyebrow-line {
+      width: 12px !important;
+    }
+    .eyebrow-text {
+      font-size: 8px !important;
+      letter-spacing: 3px !important;
+      white-space: normal !important;
+    }
+
+    /* Headline */
+    .headline-main {
+      font-size: 28px !important;
+      line-height: 1.2 !important;
+    }
+
+    /* OTP card */
+    .otp-card {
+      padding: 16px 18px !important;
+    }
+    .otp-digits {
+      font-size: 34px !important;
+      letter-spacing: 10px !important;
+    }
+    .expires-label {
+      font-size: 8px !important;
+      letter-spacing: 1.5px !important;
+    }
+    .expires-value {
+      font-size: 18px !important;
+    }
+
+    /* Step items */
+    .step-cell {
+      width: 26px !important;
+      padding-right: 10px !important;
+    }
+    .step-circle {
+      width: 24px !important;
+      height: 24px !important;
+      line-height: 24px !important;
+      font-size: 9px !important;
+    }
+    .step-title {
+      font-size: 12px !important;
+    }
+    .step-desc {
+      font-size: 11px !important;
+    }
+
+    /* General spacing */
+    .section-spacer {
+      margin-bottom: 22px !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- EYEBROW -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;" class="section-spacer">
     <tr>
         <td>
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;
-                    </td>
-                    <td
-                        style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">
-                        {{ eyebrow | default("VERIFICATION CODE") }}</td>
-                    <td style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;
-                    </td>
+                    <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
+                    <td class="eyebrow-text" style="padding:0 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;white-space:nowrap;">{{ eyebrow | default("VERIFICATION CODE") }}</td>
+                    <td class="eyebrow-line" style="width:20px;height:1px;background-color:#C9A36F;font-size:1px;line-height:1px;">&nbsp;</td>
                 </tr>
             </table>
         </td>
@@ -25,23 +83,19 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
     <tr>
         <td>
-            <div
-                style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
-                {{ headline | default("Your verification") }}<br><span style="color:#C9A36F;">{{ headline_accent |
-                    default("code.") }}</span>
+            <div class="headline-main" style="font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;color:#0D1B2A;line-height:1.18;">
+                {{ headline | default("Your verification") }}<br><span style="color:#C9A36F;">{{ headline_accent | default("code.") }}</span>
             </div>
         </td>
     </tr>
 </table>
 
 <!-- SUBTITLE -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
     <tr>
         <td>
-            <p
-                style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
-                {{ subtitle | default("Use the code below to complete your request. This code is valid for 5 minutes.")
-                }}
+            <p style="font-family:Arial,sans-serif;font-size:14px;font-weight:300;color:#6B7280;line-height:1.65;margin:0;">
+                {{ subtitle | default("Use the code below to complete your request. This code is valid for 5 minutes.") }}
             </p>
         </td>
     </tr>
@@ -58,33 +112,25 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
     <tr>
         <td>
-            <p
-                style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">
-                YOUR ONE-TIME CODE</p>
+            <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">YOUR ONE-TIME CODE</p>
         </td>
     </tr>
 </table>
 
 <!-- OTP CODE CARD -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;" class="section-spacer">
     <tr>
-        <td style="border-left:3px solid #C9A36F;background-color:#F8F6F2;border-radius:0 4px 4px 0;padding:20px 24px;">
+        <td class="otp-card" style="border-left:3px solid #C9A36F;background-color:#F8F6F2;border-radius:0 4px 4px 0;padding:20px 24px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td>
                         <!-- OTP DIGITS -->
-                        <div
-                            style="font-family:Georgia,'Times New Roman',serif;font-size:42px;font-weight:700;color:#0D1B2A;letter-spacing:14px;line-height:1;">
-                            {{ otp }}</div>
+                        <div class="otp-digits" style="font-family:Georgia,'Times New Roman',serif;font-size:42px;font-weight:700;color:#0D1B2A;letter-spacing:14px;line-height:1;">{{ otp }}</div>
                     </td>
                     <td align="right" style="vertical-align:middle;">
                         <!-- EXPIRES BADGE -->
-                        <div
-                            style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;">
-                            EXPIRES IN</div>
-                        <div
-                            style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:700;color:#C9A36F;margin-top:2px;">
-                            5 min</div>
+                        <div class="expires-label" style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:#9B8E7E;text-transform:uppercase;">EXPIRES IN</div>
+                        <div class="expires-value" style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:700;color:#C9A36F;margin-top:2px;">5 min</div>
                     </td>
                 </tr>
             </table>
@@ -103,9 +149,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
     <tr>
         <td>
-            <p
-                style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">
-                SECURITY NOTICE</p>
+            <p style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:4px;color:#C9A36F;text-transform:uppercase;margin:0;">SECURITY NOTICE</p>
         </td>
     </tr>
 </table>
@@ -113,44 +157,33 @@
 <!-- NOTICE STEP 01 -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
     <tr>
-        <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+        <td class="step-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td
-                        style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">
-                        01</td>
+                    <td class="step-circle" style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">01</td>
                 </tr>
             </table>
         </td>
         <td style="vertical-align:top;">
-            <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Never
-                share this code</p>
-            <p
-                style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">
-                Luxora will never ask for your OTP via phone, chat, or email.</p>
+            <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1F2937;margin:0 0 3px 0;">Never share this code</p>
+            <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">Luxora will never ask for your OTP via phone, chat, or email.</p>
         </td>
     </tr>
 </table>
 
 <!-- NOTICE STEP 02 -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;" class="section-spacer">
     <tr>
-        <td style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
+        <td class="step-cell" style="width:32px;vertical-align:top;padding-right:14px;padding-top:2px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td
-                        style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">
-                        02</td>
+                    <td class="step-circle" style="width:28px;height:28px;background-color:#0D1B2A;border-radius:50%;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A36F;line-height:28px;">02</td>
                 </tr>
             </table>
         </td>
         <td style="vertical-align:top;">
-            <p style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#B00020;margin:0 0 3px 0;">
-                Didn't request this?</p>
-            <p
-                style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">
-                If you did not make this request, your account may be at risk. Please reset your password immediately.
-            </p>
+            <p class="step-title" style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#B00020;margin:0 0 3px 0;">Didn't request this?</p>
+            <p class="step-desc" style="font-family:Arial,sans-serif;font-size:12px;font-weight:300;color:#6B7280;line-height:1.55;margin:0;">If you did not make this request, your account may be at risk. Please reset your password immediately.</p>
         </td>
     </tr>
 </table>
@@ -159,9 +192,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td align="center">
-            <p style="font-family:Arial,sans-serif;font-size:11px;color:#9CA3AF;margin:0;">This code was requested for
-                <span style="color:#0D1B2A;font-weight:700;">{{ purpose_label | default("your Luxora account")
-                    }}</span>. If you need help, contact our support team.</p>
+            <p style="font-family:Arial,sans-serif;font-size:11px;color:#9CA3AF;margin:0;">This code was requested for <span style="color:#0D1B2A;font-weight:700;">{{ purpose_label | default("your Luxora account") }}</span>. If you need help, contact our support team.</p>
         </td>
     </tr>
 </table>
