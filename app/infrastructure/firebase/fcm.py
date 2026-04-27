@@ -37,6 +37,19 @@ from app.core.config import settings
 
 _firebase_initialized = False
 
+# =========================================================
+# APP-SPECIFIC CONFIGURATION
+# =========================================================
+
+APP_NOTIFICATION_CONFIG = {
+    "customer": {
+        "channel_id": "luxora_customer",
+    },
+    "vendor": {
+        "channel_id": "luxora_orders",
+    }
+}
+
 
 def _initialize_firebase():
     """
@@ -104,15 +117,16 @@ def send_push_notification(
     fcm_token: str,
     title: str,
     body: str,
-    data: Optional[dict] = None
+    data: Optional[dict] = None,
+    app_type: str = "customer"
 ) -> bool:
     """
-    Send a Firebase push notification to a vendor device.
+    Send a Firebase push notification to a device (vendor/customer).
 
     Parameters:
     -----------
     fcm_token : str
-        The vendor device FCM registration token
+        The device FCM registration token (vendor or customer)
     title : str
         Notification title shown on Android
     body : str
@@ -131,7 +145,7 @@ def send_push_notification(
         log_event(
             "fcm_token_missing",
             level="warning",
-            hint="Vendor has no FCM token registered"
+            hint="User has no FCM token registered"
         )
         return False
 
@@ -144,6 +158,12 @@ def send_push_notification(
     try:
 
         from firebase_admin import messaging
+
+        # -------------------------------------------------
+        # APP CONFIG
+        # -------------------------------------------------
+
+        config = APP_NOTIFICATION_CONFIG.get(app_type, APP_NOTIFICATION_CONFIG["customer"])
 
         # -------------------------------------------------
         # BUILD MESSAGE
@@ -160,7 +180,7 @@ def send_push_notification(
                 priority="high",
                 notification=messaging.AndroidNotification(
                     sound="default",
-                    channel_id="luxora_orders",
+                    channel_id=config["channel_id"],
                     click_action="FLUTTER_NOTIFICATION_CLICK"
                 )
             ),
@@ -177,6 +197,7 @@ def send_push_notification(
         log_event(
             "fcm_notification_sent",
             level="info",
+            app_type=app_type,
             fcm_response=response
         )
 

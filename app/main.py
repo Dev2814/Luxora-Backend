@@ -24,7 +24,7 @@ from fastapi import FastAPI, Depends
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-
+# from app.infrastructure.scheduler import start_scheduler
 from contextlib import asynccontextmanager
 import threading
 import time
@@ -33,6 +33,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 
 from swagger_ui_bundle import swagger_ui_path
+from app.infrastructure.cleanup.notification_cleanup import delete_old_notifications
 
 from app.infrastructure.database.session import SessionLocal, get_db
 from app.api.v1.api import api_router
@@ -72,6 +73,7 @@ async def lifespan(app: FastAPI):
             db = SessionLocal()
             try:
                 auto_update_orders(db)
+                delete_old_notifications(db, minutes=1)
             finally:
                 db.close()
 

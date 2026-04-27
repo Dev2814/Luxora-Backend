@@ -107,6 +107,12 @@ class Notification(Base):
         index=True
     )
 
+    read_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+        index=True
+    )
+
     # =========================================================
     # TIMESTAMPS
     # =========================================================

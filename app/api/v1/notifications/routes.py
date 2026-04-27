@@ -20,14 +20,17 @@ Customer Order     → FCM Push → Flutter App receives notification
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
+from datetime import datetime
 
 from app.api.deps import get_db
 from app.api.deps_auth import get_current_user
-from app.core.permissions import require_role
+from app.core.permissions import require_roles
 from app.core.logger import log_event
 
 from app.models.notification import Notification
 from app.models.vendor_profile import VendorProfile
+from app.models.customer_profile import CustomerProfile
+from app.infrastructure.cleanup.notification_cleanup import delete_old_notifications
 
 from app.api.v1.notifications.schemas import (
     FCMTokenRegister,
@@ -48,8 +51,8 @@ router = APIRouter(
 
 @router.post(
     "/fcm-token",
-    summary="Register vendor FCM device token",
-    dependencies=[Depends(require_role("vendor"))]
+    summary="Register FCM device token",
+    dependencies=[Depends(require_roles("vendor", "customer"))]
 )
 def register_fcm_token(
     payload: FCMTokenRegister,
@@ -64,27 +67,73 @@ def register_fcm_token(
     can send push notifications when new orders arrive.
     """
 
-    vendor = (
-        db.query(VendorProfile)
-        .filter(VendorProfile.user_id == user["user_id"])
-        .first()
-    )
+    # vendor = (
+    #     db.query(VendorProfile)
+    #     .filter(VendorProfile.user_id == user["user_id"])
+    #     .first()
+    # )
 
-    if not vendor:
-        raise HTTPException(status_code=404, detail="Vendor profile not found")
+    # if not vendor:
+    #     raise HTTPException(status_code=404, detail="Vendor profile not found")
 
-    vendor.fcm_token = payload.fcm_token
+    # vendor.fcm_token = payload.fcm_token
 
+    # db.commit()
+
+    # log_event(
+    #     "vendor_fcm_token_registered",
+    #     user_id=user["user_id"],
+    #     vendor_id=vendor.id
+    # )
+
+    # return {"message": "FCM token registered successfully"}
+
+    user_role = user["role"]
+
+    # --------------------------------------------------
+    # VENDOR
+    # --------------------------------------------------
+    if user_role == "vendor":
+        vendor = (
+            db.query(VendorProfile)
+            .filter(VendorProfile.user_id == user["user_id"])
+            .first()
+        )
+
+        if not vendor:
+            raise HTTPException(status_code=404, detail="Vendor profile not found")
+
+        vendor.fcm_token = payload.fcm_token
+
+
+    # --------------------------------------------------
+    # CUSTOMER
+    # --------------------------------------------------
+    elif user_role == "customer":
+        customer = (
+            db.query(CustomerProfile)
+            .filter(CustomerProfile.user_id == user["user_id"])
+            .first()
+        )
+
+        if not customer:
+            raise HTTPException(status_code=404, detail="Customer profile not found")
+
+        customer.fcm_token = payload.fcm_token
+
+
+    # --------------------------------------------------
+    # SAVE
+    # --------------------------------------------------
     db.commit()
 
     log_event(
-        "vendor_fcm_token_registered",
+        "fcm_token_registered",
         user_id=user["user_id"],
-        vendor_id=vendor.id
+        role=user_role
     )
 
     return {"message": "FCM token registered successfully"}
-
 
 # =========================================================
 # GET MY NOTIFICATIONS
@@ -93,15 +142,15 @@ def register_fcm_token(
 @router.get(
     "/",
     response_model=NotificationListResponse,
-    summary="Get vendor notifications",
-    dependencies=[Depends(require_role("vendor"))]
+    summary="Get notifications",
+    dependencies=[Depends(require_roles("vendor", "customer"))]
 )
 def get_notifications(
     user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Returns all notifications for the authenticated vendor,
+    Returns all notifications for the authenticated user,
     ordered by latest first.
 
     Also returns total count and unread count for badge display.
@@ -130,7 +179,7 @@ def get_notifications(
 @router.patch(
     "/{notification_id}/read",
     summary="Mark a notification as read",
-    dependencies=[Depends(require_role("vendor"))]
+    dependencies=[Depends(require_roles("vendor", "customer"))]
 )
 def mark_notification_read(
     notification_id: int,
@@ -156,7 +205,10 @@ def mark_notification_read(
         raise HTTPException(status_code=404, detail="Notification not found")
 
     notification.is_read = True
+    notification.read_at = datetime.utcnow()
     db.commit()
+
+    delete_old_notifications(db, minutes=1)
 
     return {"message": "Notification marked as read", "id": notification_id}
 
@@ -168,7 +220,7 @@ def mark_notification_read(
 @router.patch(
     "/read-all",
     summary="Mark all notifications as read",
-    dependencies=[Depends(require_role("vendor"))]
+    dependencies=[Depends(require_roles("vendor", "customer"))]
 )
 def mark_all_notifications_read(
     user=Depends(get_current_user),
@@ -186,15 +238,32 @@ def mark_all_notifications_read(
             Notification.user_id == user["user_id"],
             Notification.is_read == False
         )
-        .update({"is_read": True})
+        .update({
+            "is_read": True,
+            "read_at": datetime.utcnow()
+            })
     )
 
     db.commit()
 
     log_event(
-        "vendor_notifications_all_read",
+        "user_notifications_all_read",
         user_id=user["user_id"],
         count=updated
     )
 
     return {"message": "All notifications marked as read", "updated": updated}
+
+@router.delete("/cleanup-test")
+def cleanup_notifications_test(
+    db: Session = Depends(get_db)
+):
+    """
+    Test endpoint to delete old notifications.
+    """
+
+    from app.infrastructure.cleanup.notification_cleanup import delete_old_notifications
+
+    delete_old_notifications(db, minutes=1)
+
+    return {"message": "Old notifications deleted (test mode)"}

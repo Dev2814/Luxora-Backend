@@ -38,6 +38,7 @@ from app.models.notification import Notification
 
 from app.domains.orders.repository import OrderRepository
 from app.domains.cart.repository import CartRepository
+from app.domains.notifications.service import NotificationService
 
 from datetime import datetime
 import uuid
@@ -61,6 +62,7 @@ class OrderService:
         self.cart_repo = CartRepository(db)
 
         self.invoice_service = InvoiceService(self.db)
+        self.notification_service = NotificationService(self.db)
 
     def generate_order_number(self):
         return f"ORD-{datetime.utcnow().year}-{uuid.uuid4().hex[:8].upper()}"
@@ -183,81 +185,177 @@ class OrderService:
 
             self.db.refresh(order)
 
-            # =========================================================
-            # VENDOR NOTIFICATION (NEW ORDER)
-            # =========================================================
+            # # =========================================================
+            # # VENDOR NOTIFICATION (NEW ORDER)
+            # # =========================================================
 
+            # try:
+
+            #     vendor_notifications = []
+
+            #     for item in order.items:
+
+            #         variant = item.variant
+            #         product = variant.product
+            #         vendor = product.vendor
+            #         vendor_user = vendor.user
+
+            #         # Avoid duplicate notifications per vendor
+            #         if vendor_user.id in vendor_notifications:
+            #             continue
+
+            #         vendor_notifications.append(vendor_user.id)
+
+            #         # Customer name
+            #         customer_name = (
+            #             order.user.customer_profile.full_name
+            #             if order.user.customer_profile else "Customer"
+            #         )
+
+            #         # Build notification content
+            #         notif_title = "New Order Received"
+            #         notif_message = (
+            #             f"{customer_name} placed an order for "
+            #             f"{product.name} ({variant.name})"
+            #         )
+
+            #         # --------------------------------------------------
+            #         # WRITE DB NOTIFICATION
+            #         # --------------------------------------------------
+            #         notification = Notification(
+            #             user_id=vendor_user.id,
+            #             title=notif_title,
+            #             message=notif_message,
+            #             reference_id=order.id,
+            #             reference_type="order"
+            #         )
+
+            #         self.db.add(notification)
+
+            #         # --------------------------------------------------
+            #         # SEND FCM PUSH NOTIFICATION (FIREBASE)
+            #         # --------------------------------------------------
+            #         fcm_token = getattr(vendor, "fcm_token", None)
+
+            #         if fcm_token:
+            #             send_push_notification(
+            #                 fcm_token=fcm_token,
+            #                 title=notif_title,
+            #                 body=notif_message,
+            #                 data={
+            #                     "type": "new_order",
+            #                     "order_id": str(order.id),
+            #                     "product_name": product.name,
+            #                     "variant_name": variant.name
+            #                 }
+            #             )
+
+            #     self.db.commit()
+
+            #     log_event(
+            #         "vendor_notifications_created",
+            #         order_id=order.id,
+            #         vendors_notified=len(vendor_notifications)
+            #     )
+
+            # except Exception as e:
+
+            #     log_event(
+            #         "vendor_notification_failed",
+            #         level="error",
+            #         order_id=order.id,
+            #         error=str(e)
+            #     )
+
+            # =========================================================
+            # SEND NOTIFICATION (CUSTOMER)
+            # =========================================================
             try:
+                customer_profile = order.user.customer_profile
 
-                vendor_notifications = []
+                if customer_profile:
+                    customer_name = customer_profile.full_name or "Customer"
+
+                    title = "Order Placed Successfully"
+                    message = f"Hi {customer_name}, your order #{order.id} has been placed successfully."
+
+                    self.notification_service.create_and_send(
+                        user_id=order.user_id,
+                        title=title,
+                        message=message,
+                        fcm_token=getattr(customer_profile, "fcm_token", None),
+                        reference_id=order.id,
+                        reference_type="order",
+                        data={
+                            "type": "order_created",
+                            "order_id": str(order.id)
+                        }
+                    )
+
+                    log_event(
+                        "customer_notification_sent",
+                        user_id=order.user_id,
+                        order_id=order.id
+                    )
+
+            except Exception as e:
+                log_event(
+                    "customer_notification_failed",
+                    level="error",
+                    order_id=order.id,
+                    error=str(e)
+                )
+            
+            # =========================================================
+            # SEND NOTIFICATIONS (VENDOR)
+            # =========================================================
+            
+            try:
+                notified_vendors = set()
 
                 for item in order.items:
-
                     variant = item.variant
                     product = variant.product
                     vendor = product.vendor
                     vendor_user = vendor.user
 
-                    # Avoid duplicate notifications per vendor
-                    if vendor_user.id in vendor_notifications:
+                    # avoid duplicate notifications
+                    if vendor_user.id in notified_vendors:
                         continue
 
-                    vendor_notifications.append(vendor_user.id)
+                    notified_vendors.add(vendor_user.id)
 
-                    # Customer name
                     customer_name = (
                         order.user.customer_profile.full_name
                         if order.user.customer_profile else "Customer"
                     )
 
-                    # Build notification content
-                    notif_title = "New Order Received"
-                    notif_message = (
-                        f"{customer_name} placed an order for "
-                        f"{product.name} ({variant.name})"
-                    )
+                    title = "New Order Received"
+                    message = f"{customer_name} placed an order for {product.name} ({variant.name})"
 
-                    # --------------------------------------------------
-                    # WRITE DB NOTIFICATION
-                    # --------------------------------------------------
-                    notification = Notification(
+                    self.notification_service.create_and_send(
                         user_id=vendor_user.id,
-                        title=notif_title,
-                        message=notif_message,
+                        title=title,
+                        message=message,
+                        fcm_token=getattr(vendor, "fcm_token", None),
                         reference_id=order.id,
-                        reference_type="order"
+                        reference_type="order",
+                        data={
+                            "type": "new_order",
+                            "order_id": str(order.id),
+                            "product_name": product.name,
+                            "variant_name": variant.name
+                        },
+                        app_type="vendor"
                     )
-
-                    self.db.add(notification)
-
-                    # --------------------------------------------------
-                    # SEND FCM PUSH NOTIFICATION (FIREBASE)
-                    # --------------------------------------------------
-                    fcm_token = getattr(vendor, "fcm_token", None)
-
-                    if fcm_token:
-                        send_push_notification(
-                            fcm_token=fcm_token,
-                            title=notif_title,
-                            body=notif_message,
-                            data={
-                                "type": "new_order",
-                                "order_id": str(order.id),
-                                "product_name": product.name,
-                                "variant_name": variant.name
-                            }
-                        )
-
-                self.db.commit()
 
                 log_event(
-                    "vendor_notifications_created",
+                    "vendor_notifications_sent",
                     order_id=order.id,
-                    vendors_notified=len(vendor_notifications)
+                    count=len(notified_vendors)
                 )
 
             except Exception as e:
-
                 log_event(
                     "vendor_notification_failed",
                     level="error",

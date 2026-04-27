@@ -109,6 +109,11 @@ class CustomerProfile(Base):
         nullable=True
     )
 
+    fcm_token = Column(
+        String(512),
+        nullable=True
+    )
+
     # --------------------------------------------------
     # AUDIT TIMESTAMPS
     # --------------------------------------------------
