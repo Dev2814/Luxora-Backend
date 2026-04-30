@@ -73,7 +73,7 @@ async def lifespan(app: FastAPI):
             db = SessionLocal()
             try:
                 auto_update_orders(db)
-                delete_old_notifications(db, minutes=1)
+                delete_old_notifications(db)
             finally:
                 db.close()
 

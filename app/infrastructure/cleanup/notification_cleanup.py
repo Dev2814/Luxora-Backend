@@ -6,17 +6,17 @@ Deletes old read notifications after a certain time.
 
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
+from app.core.config import settings
+
 
 from app.models.notification import Notification
 from app.core.logger import log_event
 
+def delete_old_notifications(db: Session, minutes: int = None):
 
-def delete_old_notifications(db: Session, minutes: int = 1):
-    """
-    Delete notifications that are:
-    - Already read
-    - Older than X minutes
-    """
+    from app.core.config import settings
+
+    minutes = settings.NOTIFICATION_DELETE_AFTER_MINUTES
 
     cutoff_time = datetime.utcnow() - timedelta(minutes=minutes)
 

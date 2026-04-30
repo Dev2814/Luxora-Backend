@@ -124,6 +124,12 @@ class Settings(BaseSettings):
     FIREBASE_CREDENTIALS_PATH: Optional[str] = Field(
         default=None,
         description="Path to Firebase service account JSON file")
+    
+    # --------------------------------------------------
+    # NOTIFICATION CONFIGURATION
+    # --------------------------------------------------
+
+    NOTIFICATION_DELETE_AFTER_MINUTES: int = 43200  # 30 days
 
     # --------------------------------------------------
     # SETTINGS CONFIG
