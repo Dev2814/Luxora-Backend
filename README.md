@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 [![Redis](https://img.shields.io/badge/Redis-7+-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io)
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF?style=for-the-badge&logo=stripe&logoColor=white)](https://stripe.com)
 [![Firebase](https://img.shields.io/badge/Firebase-FCM-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
@@ -134,7 +134,7 @@ Luxora Backend follows a strict **layered / Domain-Driven Design** architecture 
          ┌────────────┴────────────┐
          │                         │
    ┌─────▼──────┐          ┌──────▼─────┐
-   │ PostgreSQL │          │   Redis    │
+   │   MySQL    │          │   Redis    │
    │  Database  │          │   Cache    │
    └────────────┘          └────────────┘
 ```
@@ -326,7 +326,7 @@ luxora-backend/
 |---|---|
 | **SQLAlchemy 2.x** | ORM & database abstraction |
 | **Alembic** | Database migration management |
-| **PostgreSQL** | Primary relational database |
+| **MySQL** | Primary relational database |
 
 ### Caching & Sessions
 
@@ -375,7 +375,7 @@ luxora-backend/
 
 ## 🗄 Database Models
 
-The platform uses **31 SQLAlchemy ORM models** mapped to PostgreSQL tables:
+The platform uses **31 SQLAlchemy ORM models** mapped to MySQL tables:
 
 ### User & Auth Models
 
@@ -965,7 +965,7 @@ All configuration is managed via `app/core/config.py` using **Pydantic BaseSetti
 
 | Variable | Description | Example |
 |---|---|---|
-| `DATABASE_URL` | PostgreSQL connection URL | `postgresql://user:pass@localhost:5432/luxora` |
+| `DATABASE_URL` | MySQL connection URL | `mysql+pymysql://root:@localhost:3306/luxora_db` |
 | `REDIS_URL` | Redis connection URL | `redis://localhost:6379/0` |
 | `SECRET_KEY` | JWT signing secret (min 32 chars) | `your-very-secure-secret-key-here-32chars` |
 | `STRIPE_PUBLIC_KEY` | Stripe publishable key | `pk_test_...` |
@@ -1003,7 +1003,7 @@ ENVIRONMENT=development
 DEBUG=False
 
 # ── DATABASE ─────────────────────────────────────────────
-DATABASE_URL=postgresql://postgres:password@localhost:5432/luxora_db
+DATABASE_URL=mysql+pymysql://root:@localhost:3306/luxora_db
 
 # ── REDIS ────────────────────────────────────────────────
 REDIS_URL=redis://localhost:6379/0
@@ -1046,7 +1046,7 @@ API_RATE_LIMIT=100
 ### Prerequisites
 
 - **Python** 3.11+
-- **PostgreSQL** 15+
+- **MySQL** 8.0+
 - **Redis** 7+
 - **pip** / **virtualenv**
 
@@ -1075,7 +1075,7 @@ nano .env
 ### Database Setup
 
 ```bash
-# Ensure PostgreSQL is running and your DATABASE_URL is configured
+# Ensure MySQL is running and your DATABASE_URL is configured
 
 # Run Alembic migrations to create all tables
 alembic upgrade head
